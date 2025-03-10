@@ -4,14 +4,6 @@ import numpy as np
 import pandas as pd
 import fault_injector.injector as injector
 
-'''
-To Do:
-- convert to proper class formatting
-- add comments/descriptions
-- add error handling for the class
-- update demo
-- update documentation (ReadME)
-'''
 
 class DataFrameFaultInjection():
     def __init__(self, df:pd.DataFrame, column_names, start_val:int, stop_val:int):
