@@ -74,17 +74,19 @@ Faults and their corresponding function:
 * `reset_values()`: this function will reset the data to the original values.
 
 ## Inject Faults into A DataFrame
-As mentioned previously, the `FaultInjection` class is designed to inject faults into lists. If you are using data frames, use the `DataFrameFaultInjection` function. This function allows you to use the `FaultInjection` on a data frame. It takes in:
+As mentioned previously, the `FaultInjection` class is designed to inject faults into lists. If you are using data frames, use the `DataFrameFaultInjection` class. This class allows you to use the `FaultInjection` on a data frame. It takes in:
 - `df`: this should be a pandas data frame
 - `column_names`: this can be a single string or a list of strings corresponding to column names in `df`
 - `start_val`: dictate the starting time for the fault. It should be a positive integer that is less than the length of the values
 - `stop_val`: dictate the ending time for the fault. It should be an integer that is larger than start, but less than the length of the values
 
-The output of this function is a dictionary. The keys correspond to the strings in `column_names`. This function initializes a `FaultInjection` class object for every key. This makes it so the user can utilize all of the functions available in the `FaultInjection` class. 
+### Inject Fault into DataFrame
+The output of the `inject_fault` function in `DataFrameFaultInjection` is a dictionary. The keys correspond to the strings in `column_names`. This function initializes a `FaultInjection` class object for every key. This makes it so the user can utilize all of the functions available in the `FaultInjection` class. 
 
 For example, this would allow you to inject an offset fault in all of the specified columns:
 ```py
-fault_dict = injector.DataFrameFaultInjection(df, column_names=col_lst, start_val=start_val, stop_val=stop_val)
+inject_fault_df = df_injector.DataFrameFaultInjection(df, column_names=col_lst, start_val=start_val, stop_val=stop_val)
+fault_dict = inject_fault_df.inject_fault()
 
 for key in fault_dict.keys():
     print(key)
@@ -93,6 +95,4 @@ for key in fault_dict.keys():
 ```
 
 ### Update DataFrame
-The `update_df` function can be used to take the faulty data and update the data in the original data frame. This can be used when the user only injects faults into some of the columns. This function takes in the original pandas data frame and the fault dictionary produced by the `DataFrameFaultInjection` function.
-
-*Note: if the user puts in an empty pandas data frame, the function will produce a data frame containing only the faulty data.*
+The `update_df` function can be used to take the faulty data and update the data in the original data frame. This can be used when the user only injects faults into some of the columns.

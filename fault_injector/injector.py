@@ -1,28 +1,6 @@
 import random
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-
-
-def DataFrameFaultInjection(df, column_names, start_val, stop_val):
-    fault_dict = {}
-
-    if isinstance(column_names, str):
-        column_names = [column_names]
-
-    for i in column_names:
-        original_lst = list(df[i].values)
-        df_inject = FaultInjection(values=original_lst, start=start_val, stop=stop_val, increasing=1)
-        
-        fault_dict[i] = df_inject
-    return fault_dict
-
-def update_df(df, fault_dict):
-    fault_df = df.copy()
-    for key in fault_dict.keys():
-        fault_df[key] = fault_dict[key].values
-
-    return fault_df
 
 class FaultInjection:
     # this class is designed to take in a list of numeric values and inject a fault into the values
