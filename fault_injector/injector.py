@@ -10,65 +10,66 @@ class FaultInjection:
 
 
     def __init__(self, values, start=None, stop=None, increasing=0):
-        # check that values is a list of numbers
-        if not isinstance(values, list):
-            raise ValueError("values needs to be a list of numbers")
-        elif not isinstance(values[0], (float, int, np.int64)):
-            raise ValueError("values needs to be a list of numbers")
+        try:
+            # Check if it's a non-empty list
+            if not isinstance(values, list) or not values:
+                raise ValueError("values must be a non-empty list of numbers.")
 
-        # find the maximum possible length of the fault
-        self.max_end = len(values)
+            # Check the type of the first element in the list
+            if not isinstance(values[0], (float, int, np.int64)):
+                raise ValueError("values must be a list of numbers.")
 
-        # this variable will receive the fault injection
-        self.values = values.copy()
+            # find the maximum possible length of the fault
+            self.max_end = len(values)
 
-        # the original values will be preserved and can be used for comparison
-        self.original_values = values.copy()
+            # this variable will receive the fault injection
+            self.values = values.copy()
 
-        if start is None:
-            self.start = 0
-        elif start == "random":
-            # "random" will generate a random starting point
-            self.start = random.randint(0, self.max_end / 2)
-        elif not isinstance(start, int) or start < 0:
-            raise ValueError(
-                "Invalid value for 'start'. It must be either:\n"
-                " - An integer between 0 and the maximum endpoint.\n"
-                " - 'random' to generate a random starting point.\n"
-                " - None to default to 0."
-            )
-        elif start >= self.max_end:
-            self.start = self.max_end - 1
-        else:
-            self.start = start
+            # the original values will be preserved and can be used for comparison
+            self.original_values = values.copy()
 
-        if stop is None:
-            self.stop = self.max_end
-        elif stop == "random":
-            self.stop = random.randint(self.start+1, self.max_end)
-        elif not isinstance(stop, int) or stop < 0:
-            raise ValueError(
-                "'stop' must be an integer between 'start' and the length of values,\n"
-                "or 'random' to generate a random endpoint.\n"
-                "Set to None to default to the length of values."
-            )
-        else:
-            self.stop = min(max(self.start, stop), self.max_end)
+            # calculate the average value
+            self.original_average = np.average(self.original_values)
 
-        # calculate the average value
-        self.original_average = np.average(self.original_values)
+            # Validate 'start'
+            if start is None:
+                self.start = 0
+            elif start == "random":
+                self.start = random.randint(0, self.max_end // 2)
+            elif isinstance(start, int) and start >= 0:
+                self.start = min(start, self.max_end - 1)
+            else:
+                raise ValueError(
+                    "Invalid value for 'start'. It must be either:\n"
+                    " - An integer between 0 and the length of values.\n"
+                    " - 'random' to generate a random starting point.\n"
+                    " - None to default to 0."
+                )
 
-        # define the fault length
-        self.fault_length = self.stop - self.start
+            # Validate 'stop'
+            if stop is None:
+                self.stop = self.max_end
+            elif stop == "random":
+                self.stop = random.randint(self.start + 1, self.max_end)
+            elif isinstance(stop, int) and stop >= 0:
+                self.stop = min(max(self.start, stop), self.max_end)
+            else:
+                raise ValueError(
+                    "'stop' must be an integer between 'start' and the length of values,\n"
+                    "or 'random' to generate a random endpoint.\n"
+                    "Set to None to default to the length of values."
+                )
 
-        # check if the fault will be increasing
-        if increasing == 1 or increasing == 0:
-            self.fault_direction = 1
-        elif increasing == 0:
-            self.fault_direction = -1
-        else:
-            raise ValueError("increasing needs to be 0 or 1")
+            # Validate 'increasing'
+            if increasing in {0, 1}:
+                self.fault_direction = 1 if increasing == 1 else -1
+            else:
+                raise ValueError("increasing must be 0 or 1.")
+            # define the fault length
+            self.fault_length = self.stop - self.start
 
+        except ValueError as e:
+            print(f"Error: {e}")
 
     def reset_values(self):
         # this will remove the injected fault
@@ -95,12 +96,15 @@ class FaultInjection:
 
 
     def inject_drift(self, drift_rate=None):
-        if drift_rate == None:
-            # generate a random drift rate
-            drift_rate = random.uniform(0, 0.0001) * self.fault_direction * self.original_average
-        elif not isinstance(drift_rate, (float, int, np.int64)):
-            raise ValueError("drift_rate needs to be a float or int")
-        self.drift_rate = drift_rate
+        try:
+            if drift_rate == None:
+                # generate a random drift rate
+                drift_rate = random.uniform(0, 0.0001) * self.fault_direction * self.original_average
+            elif not isinstance(drift_rate, (float, int, np.int64)):
+                raise ValueError("drift_rate needs to be a float or int")
+            self.drift_rate = drift_rate
+        except ValueError as e:
+            print(f"Error: {e}")
 
         # list of values that equal the amount of change during the fault injection
         change_lst = list(np.array(range(1, self.fault_length + 1)) * self.drift_rate)
@@ -109,11 +113,13 @@ class FaultInjection:
 
 
     def inject_offset(self, offset_rate=None):
-        if offset_rate == None:
-            offset_rate = random.uniform(0.01, 0.1)
-        elif not isinstance(offset_rate, (float, int, np.int64)):
-            raise ValueError("offset_rate needs to be a float or int")
-
+        try:
+            if offset_rate == None:
+                offset_rate = random.uniform(0.01, 0.1)
+            elif not isinstance(offset_rate, (float, int, np.int64)):
+                raise ValueError("offset_rate needs to be a float or int")
+        except ValueError as e:
+            print(f"Error: {e}")
         self.offset_rate = self.original_average * offset_rate
 
         # list of values that equal the amount of change during the fault injection
@@ -131,11 +137,13 @@ class FaultInjection:
 
     def inject_stuck_value(self, stuck_val=None):
         # check stuck_val input
-        if stuck_val is None:
-            stuck_val = random.uniform(0.01, 0.1) * self.fault_direction * self.original_average + self.original_average
-        elif not isinstance(stuck_val, (int, float, np.int64)):
-            raise ValueError("stuck_val needs to be a float or an int. To generate a random stuck_val, set to None")
-
+        try:
+            if stuck_val is None:
+                stuck_val = random.uniform(0.01, 0.1) * self.fault_direction * self.original_average + self.original_average
+            elif not isinstance(stuck_val, (int, float, np.int64)):
+                raise ValueError("stuck_val needs to be a float or an int. To generate a random stuck_val, set to None")
+        except ValueError as e:
+            print(f"Error: {e}")
         # list of stuck values
         change_lst = [stuck_val] * self.fault_length
 
@@ -143,44 +151,42 @@ class FaultInjection:
 
 
     def inject_noise(self, noise_type, params = []):
-        if not isinstance(params, list):
-            raise ValueError("params needs to be a list")
-        elif noise_type == 'gaussian':
-            if len(params) == 0:
-                # calculate mean
-                params.append(np.array(self.values[self.start:self.stop]).mean())
-                # calculate standard deviation
-                params.append(np.std(self.values[self.start:self.stop]))
-            elif len(params) > 2 or len(params) == 1:
-                raise ValueError("""Params should either be an empty list or it should contain 2 elements.
-                                 \nThe values will be used in np.random.normal(params[0], params[1], fault_length)
-                                 \nparams[0] typically represents the mean of the distribution
-                                 \nparams[1] typically represents the standard deviation""")
+        try:
+            if not isinstance(params, list):
+                raise ValueError("params needs to be a list")
+            elif noise_type == 'gaussian':
+                if len(params) == 0:
+                    # calculate mean
+                    params.append(np.array(self.values[self.start:self.stop]).mean())
+                    # calculate standard deviation
+                    params.append(np.std(self.values[self.start:self.stop]))
+                elif len(params) > 2 or len(params) == 1:
+                    raise ValueError("""Params should either be an empty list or it should contain 2 elements.
+                                    \nThe values will be used in np.random.normal(params[0], params[1], fault_length)
+                                    \nparams[0] typically represents the mean of the distribution
+                                    \nparams[1] typically represents the standard deviation""")
 
-            change_lst = np.random.normal(params[0], params[1], self.fault_length)
-            self.values[self.start:self.stop] = change_lst
+                change_lst = np.random.normal(params[0], params[1], self.fault_length)
+                self.values[self.start:self.stop] = change_lst
 
-        elif noise_type == 'uniform':
-            if len(params) == 0:
-                # calculate min value
-                params.append(0.999 * self.original_average)
-                # calculate max value
-                params.append(1.001 * self.original_average)
-            elif len(params) > 2 or len(params) == 1:
-                raise ValueError("""Params should either be an empty list or it should contain 2 elements.
-                                 \nThe values will be used in np.random.uniform(params[0], params[1], fault_length)
-                                 \nparams[0] represents the lower bound
-                                 \nparams[1] represents the upper bound""")
+            elif noise_type == 'uniform':
+                if len(params) == 0:
+                    # calculate min value
+                    params.append(0.999 * self.original_average)
+                    # calculate max value
+                    params.append(1.001 * self.original_average)
+                elif len(params) > 2 or len(params) == 1:
+                    raise ValueError("""Params should either be an empty list or it should contain 2 elements.
+                                    \nThe values will be used in np.random.uniform(params[0], params[1], fault_length)
+                                    \nparams[0] represents the lower bound
+                                    \nparams[1] represents the upper bound""")
 
-            change_lst = np.random.uniform(params[0], params[1], self.fault_length)
-            self.values[self.start:self.stop] = change_lst
-
-        else:
-            raise ValueError('noise_type needs to be \"gaussian\" or \"uniform\" ')
-
-
-
-
+                change_lst = np.random.uniform(params[0], params[1], self.fault_length)
+                self.values[self.start:self.stop] = change_lst
+            else:
+                raise ValueError('noise_type needs to be \"gaussian\" or \"uniform\" ')
+        except ValueError as e:
+            print(f"Error: {e}")
 
     def plot_compare_values(self):
         # this function can be used to plot the injected fault and compar it to the original data

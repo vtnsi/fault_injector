@@ -9,29 +9,32 @@ class DataGen:
     # size should be a positive integer
 
     def __init__(self, rand_max=None, rand_min=None, size=0):
-        # rand_max & rand_min control the extremes for the generated data
-        if isinstance(rand_max, (float, int)):
-            self.rand_max = rand_max
-        else:
-            raise ValueError("Value must be an int or a float")
+        try:
+            # rand_max & rand_min control the extremes for the generated data
+            if isinstance(rand_max, (float, int)):
+                self.rand_max = rand_max
+            else:
+                raise ValueError("Value must be an int or a float")
 
-        if isinstance(rand_min, (float, int)) and rand_min < rand_max:
-            self.rand_min = rand_min
-        else:
-            raise ValueError("Value must be an int or a float and less than rand_max")
+            if isinstance(rand_min, (float, int)) and rand_min < rand_max:
+                self.rand_min = rand_min
+            else:
+                raise ValueError("Value must be an int or a float and less than rand_max")
 
-        # size will dictate the length of the list.
-        if isinstance(size, int) and size > 0: 
-            self.size = size
-        else:
-            raise ValueError("Value must be a positive int")
+            # size will dictate the length of the list.
+            if isinstance(size, int) and size > 0:
+                self.size = size
+            else:
+                raise ValueError("Value must be a positive int")
+        except ValueError as e:
+            print(f"Error: {e}")
 
-        # values starts as an empty list but over time the randomly generated values will be added to it 
+        # values starts as an empty list but over time the randomly generated values will be added to it
         self.values = []
 
     def random_gen(self):
         # this function will populate self.values with the randomly generated values
-        new_vals = np.random.uniform(self.rand_min, self.rand_max, self.size) 
+        new_vals = np.random.uniform(self.rand_min, self.rand_max, self.size)
         self.values.extend(new_vals)
 
     def plot_values(self):
