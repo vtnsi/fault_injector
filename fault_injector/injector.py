@@ -3,15 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class FaultInjection:
-    # this class is designed to take in a list of numeric values and inject a fault into the values
-    # values will be a list of numeric values
-    # start will dictate the starting time for the fault. It should be a positive integer that is less than the length of the values
-    # end will dictate the ending time for the fault. It should be an integer that is larger than start, but less than the length of the values
-    # to randomly generate a start/end set the variable to -1
+    # this class is designed to take in a list of numeric values and inject a fault into the values values will be a list of numeric values
+    # 'start' defines the starting time for the fault. It must be a non-negative integer less than the length of the values. Use -1 for a random starting point.
+    # 'stop' defines the ending time for the fault. It must be an integer greater than or equal to 'start' and less than or equal to the length of the values. Use -1 or 'random' for a random endpoint.
     # increasing should be a binary value (0 or 1). 1 will cause the fault to increase the values and 0 will decrease the values.
 
 
-    def __init__(self, values, start=-1, stop=-1, increasing=0):
+    def __init__(self, values, start=None, stop=None, increasing=0):
         # check that values is a list of numbers
         if not isinstance(values, list):
             raise ValueError("values needs to be a list of numbers")
@@ -27,27 +25,35 @@ class FaultInjection:
         # the original values will be preserved and can be used for comparison
         self.original_values = values.copy()
 
-        if not isinstance(start, int):
-            raise ValueError("start needs to be an integer between 0 and the length of values. Set to -1 if you want the starting point to be random.")
-        elif start >= self.max_end:
-            raise ValueError("start needs to be an integer between 0 and the length of values. Set to -1 if you want the starting point to be random.")
-        elif start < 0:
-            # by setting the value to -1, the class will generate a random starting point
+        if start is None:
+            self.start = 0
+        elif start == "random":
+            # "random" will generate a random starting point
             self.start = random.randint(0, self.max_end / 2)
+        elif not isinstance(start, int) or start < 0:
+            raise ValueError(
+                "Invalid value for 'start'. It must be either:\n"
+                " - An integer between 0 and the maximum endpoint.\n"
+                " - 'random' to generate a random starting point.\n"
+                " - None to default to 0."
+            )
+        elif start >= self.max_end:
+            self.start = self.max_end - 1
         else:
             self.start = start
 
-        if not isinstance(stop, int):
-            raise ValueError("stop needs to be an integer between start and the length of values. Set to -1 if you want the ending point to be random.")
-        elif stop > self.max_end:
-            raise ValueError("start needs to be an integer between start and the length of values. Set to -1 if you want the ending point to be random.")
-        elif stop > 0 and stop < self.start:
-            raise ValueError("start needs to be an integer between start and the length of values. Set to -1 if you want the ending point to be random.")
-        elif stop < 0:
-            # by setting the value to -1, the class will generate a random ending point
-            self.stop = random.randint(self.stop, self.max_end)
+        if stop is None:
+            self.stop = self.max_end
+        elif stop == "random":
+            self.stop = random.randint(self.start+1, self.max_end)
+        elif not isinstance(stop, int) or stop < 0:
+            raise ValueError(
+                "'stop' must be an integer between 'start' and the length of values,\n"
+                "or 'random' to generate a random endpoint.\n"
+                "Set to None to default to the length of values."
+            )
         else:
-            self.stop = stop
+            self.stop = min(max(self.start, stop), self.max_end)
 
         # calculate the average value
         self.original_average = np.average(self.original_values)
@@ -107,7 +113,7 @@ class FaultInjection:
             offset_rate = random.uniform(0.01, 0.1)
         elif not isinstance(offset_rate, (float, int, np.int64)):
             raise ValueError("offset_rate needs to be a float or int")
-        
+
         self.offset_rate = self.original_average * offset_rate
 
         # list of values that equal the amount of change during the fault injection
@@ -140,13 +146,13 @@ class FaultInjection:
         if not isinstance(params, list):
             raise ValueError("params needs to be a list")
         elif noise_type == 'gaussian':
-            if len(params) == 0: 
+            if len(params) == 0:
                 # calculate mean
                 params.append(np.array(self.values[self.start:self.stop]).mean())
                 # calculate standard deviation
                 params.append(np.std(self.values[self.start:self.stop]))
             elif len(params) > 2 or len(params) == 1:
-                raise ValueError("""Params should either be an empty list or it should contain 2 elements. 
+                raise ValueError("""Params should either be an empty list or it should contain 2 elements.
                                  \nThe values will be used in np.random.normal(params[0], params[1], fault_length)
                                  \nparams[0] typically represents the mean of the distribution
                                  \nparams[1] typically represents the standard deviation""")
@@ -155,13 +161,13 @@ class FaultInjection:
             self.values[self.start:self.stop] = change_lst
 
         elif noise_type == 'uniform':
-            if len(params) == 0: 
+            if len(params) == 0:
                 # calculate min value
                 params.append(0.999 * self.original_average)
                 # calculate max value
                 params.append(1.001 * self.original_average)
             elif len(params) > 2 or len(params) == 1:
-                raise ValueError("""Params should either be an empty list or it should contain 2 elements. 
+                raise ValueError("""Params should either be an empty list or it should contain 2 elements.
                                  \nThe values will be used in np.random.uniform(params[0], params[1], fault_length)
                                  \nparams[0] represents the lower bound
                                  \nparams[1] represents the upper bound""")

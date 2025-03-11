@@ -53,8 +53,14 @@ For more example of working with `DataGen`, check out `demo.ipynb`.
 ## Fault Injector Class
 The `FaultInjection` class in `injector.py` is the main class for this package. The class can be used to inject fault(s) during a designated time period. The class takes in:
 - `values`: a **list** of numeric values
-- `start`: dictate the starting time for the fault. It should be a positive integer that is less than the length of the values
-- `stop`: dictate the ending time for the fault. It should be an integer that is larger than start, but less than the length of the values
+- `start`: Specifies the starting time for the fault. By default, it is set to `None`, which initializes it to `0`.
+  - If set to `"random"`, a random starting point is generated between `0` and half of the length of the values.
+  - If given as an integer, it must be between `0` and the length of the values.
+  - If the provided integer is greater than or equal to the length of the values, `start` is set to the last valid index.
+- `stop`: Specifies the ending time for the fault. By default, it is set to `None`, which initializes it to the length of the values.
+  - If set to `"random"`, a random ending point is generated between `start` and the length of the values.
+  - If given as an integer, it must be at least one more than `start` and at most the length of the values.
+  - If the provided value exceeds the length of the values, it is capped at the maximum valid index.
 - `increasing`: a binary value (0 or 1). 1 will cause the fault to increase the values and 0 will decrease the values.
 
 *Note: to randomly generate a start/end, set the variable to `-1`*
@@ -81,7 +87,7 @@ As mentioned previously, the `FaultInjection` class is designed to inject faults
 - `stop_val`: dictate the ending time for the fault. It should be an integer that is larger than start, but less than the length of the values
 
 ### Inject Fault into DataFrame
-The output of the `inject_fault` function in `DataFrameFaultInjection` is a dictionary. The keys correspond to the strings in `column_names`. This function initializes a `FaultInjection` class object for every key. This makes it so the user can utilize all of the functions available in the `FaultInjection` class. 
+The output of the `inject_fault` function in `DataFrameFaultInjection` is a dictionary. The keys correspond to the strings in `column_names`. This function initializes a `FaultInjection` class object for every key. This makes it so the user can utilize all of the functions available in the `FaultInjection` class.
 
 For example, this would allow you to inject an offset fault in all of the specified columns:
 ```py
