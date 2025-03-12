@@ -77,7 +77,7 @@ Faults and their corresponding function:
 
 ### Additional Functions
 * `plot_compare_values()`: plots both the original values and the faulty data.
-* `reset_values()`: this function will reset the data to the original values.
+* `restore_values()`: this function will revert the data back to the original values.
 
 ## Inject Faults into A DataFrame
 As mentioned previously, the `FaultInjection` class is designed to inject faults into lists. If you are using data frames, use the `DataFrameFaultInjection` class. This class allows you to use the `FaultInjection` on a data frame. It takes in:

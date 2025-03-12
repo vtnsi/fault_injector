@@ -71,8 +71,8 @@ class FaultInjection:
         except ValueError as e:
             print(f"Error: {e}")
 
-    def reset_values(self):
-        # this will remove the injected fault
+    def restore_values(self):
+        # this will revert values back to the original state
         self.values = self.original_values.copy()
 
     def inject_fault(self, change_lst):
