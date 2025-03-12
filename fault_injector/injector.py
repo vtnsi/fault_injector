@@ -150,7 +150,9 @@ class FaultInjection:
         self.values[self.start:self.stop] = change_lst
 
 
-    def inject_noise(self, noise_type, params = []):
+    def inject_noise(self, noise_type, params=None):
+        if params is None:
+            params = []
         try:
             if not isinstance(params, list):
                 raise ValueError("params needs to be a list")
