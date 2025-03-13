@@ -204,19 +204,22 @@ class FaultInjection:
             print(f"Error: {e}")
 
     def plot_compare_values(self):
-        # this function can be used to plot the injected fault and compar it to the original data
+        """
+        this function can be used to plot the injected fault and compar it to the original data
+        """
         # calculate the middle of the original y values
         y_mid =  (max(self.original_values) - min(self.original_values)) / 2 + min(self.original_values)
 
         fig, ax = plt.subplots()
-        # plot the injected values
-        ax.plot(self.values, color="blue")
 
         # plot the original values
-        ax.plot(self.original_values, color="blue", alpha=0.2)
+        ax.plot(self.original_values, color='#1f77b4', label="Original")
+
+        # plot the injected values
+        ax.plot(self.values, color='#d62728', label="Fault")
 
         # plot a horizontal line in the middle of the original values
-        ax.hlines(y=0.50, xmin=0, xmax=len(self.values), color="black")
+        ax.hlines(y=y_mid, xmin=0, xmax=len(self.values), color="black")
 
         #plot a vertical line where the fault starts
         ax.vlines(
@@ -238,6 +241,6 @@ class FaultInjection:
         # dynamically change the y limits based on the values
         ax.set_ylim([min(min(self.original_values), min(self.values)) * 0.995, max(max(self.original_values), max(self.values)) * 1.005])
         ax.grid()
-
+        plt.legend()
         plt.show()
 
