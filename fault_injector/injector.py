@@ -3,21 +3,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class FaultInjection:
-    # this class is designed to take in a list of numeric values and inject a fault into the values values will be a list of numeric values
-    # 'start' defines the starting time for the fault. It must be a non-negative integer less than the length of the values. Use -1 for a random starting point.
-    # 'stop' defines the ending time for the fault. It must be an integer greater than or equal to 'start' and less than or equal to the length of the values. Use -1 or 'random' for a random endpoint.
-    # increasing should be a binary value (0 or 1). 1 will cause the fault to increase the values and 0 will decrease the values.
-
-
     def __init__(self, values, start=None, stop=None, increasing=0):
+        """
+        The FaultInjection class is designed to take in a list of numeric values and inject a fault into the values
+
+        Args:
+            values: a list of numeric values
+            start: defines the starting time for the fault and corresponds with the index values for the elements in the list.
+                - It must be a non-negative integer less than the length of the values.
+                - "random" can be used to generate a random starting value.
+                - Defaults to None.
+            stop: defines the ending time for the fault and corresponds with the index values for the elements in the list.
+                - It must be a non-negative integer less than the length of the values and greater than the 'start' value.
+                - 'random' can be used to generate a random ending value.
+                - Defaults to None.
+            increasing: should be a binary value (0 or 1).
+                - 1 will cause the fault to increase the values.
+                - 0 will decrease the values.
+                - Defaults to 0.
+        """
+
         try:
             # Check if it's a non-empty list
             if not isinstance(values, list) or not values:
-                raise ValueError("values must be a non-empty list of numbers.")
+                raise ValueError("Invalid Input (values): \n values must be a non-empty list of numbers.")
 
             # Check the type of the first element in the list
             if not isinstance(values[0], (float, int, np.int64)):
-                raise ValueError("values must be a list of numbers.")
+                raise ValueError("Invalid Input (values): \n values must be a list of numbers.")
 
             # find the maximum possible length of the fault
             self.max_end = len(values)
@@ -40,7 +53,7 @@ class FaultInjection:
                 self.start = min(start, self.max_end - 1)
             else:
                 raise ValueError(
-                    "Invalid value for 'start'. It must be either:\n"
+                    "Invalid Input (start): \n It must be either:\n"
                     " - An integer between 0 and the length of values.\n"
                     " - 'random' to generate a random starting point.\n"
                     " - None to default to 0."
@@ -55,7 +68,7 @@ class FaultInjection:
                 self.stop = min(max(self.start, stop), self.max_end)
             else:
                 raise ValueError(
-                    "'stop' must be an integer between 'start' and the length of values,\n"
+                    "Invalid Input (stop): \n 'stop' must be an integer between 'start' and the length of values,\n"
                     "or 'random' to generate a random endpoint.\n"
                     "Set to None to default to the length of values."
                 )
@@ -64,7 +77,7 @@ class FaultInjection:
             if increasing in {0, 1}:
                 self.fault_direction = 1 if increasing == 1 else -1
             else:
-                raise ValueError("increasing must be 0 or 1.")
+                raise ValueError("Invalid Input (increasing): \n increasing must be 0 or 1.")
             # define the fault length
             self.fault_length = self.stop - self.start
 
