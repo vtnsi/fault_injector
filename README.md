@@ -11,10 +11,10 @@ Fault_Injection is designed inject faults into sensor data. The fault options in
 
 ## Install & Import
 ### Add to Environment
-1. get a personal access token, [more information](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token)
+1. get a personal access token, [more information](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
 2. In environment terminal:
 ```
-pip install git+https://<USERNAME>:<PERSONAL_ACCESS_TOKEN>@gitlab.hume.vt.edu/inspect-m/fault_injection.git
+pip install git+https://<USERNAME>:<PERSONAL_ACCESS_TOKEN>@github.com:vtnsi/fault_injector.git
 ```
 
 ### Import
