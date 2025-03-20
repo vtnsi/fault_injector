@@ -11,10 +11,9 @@ Fault_Injection is designed inject faults into sensor data. The fault options in
 
 ## Install & Import
 ### Add to Environment
-1. get a personal access token, [more information](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
-2. In environment terminal:
+In environment terminal:
 ```
-pip install git+https://<USERNAME>:<PERSONAL_ACCESS_TOKEN>@github.com:vtnsi/fault_injector.git
+pip install pip install git+https://github.com/vtnsi/fault_injector.git
 ```
 
 ### Import
