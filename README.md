@@ -13,7 +13,7 @@ Fault_Injection is designed inject faults into sensor data. The fault options in
 ### Add to Environment
 In environment terminal:
 ```
-pip install pip install git+https://github.com/vtnsi/fault_injector.git
+pip install git+https://github.com/vtnsi/fault_injector.git
 ```
 
 ### Import
