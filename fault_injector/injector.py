@@ -172,7 +172,7 @@ class FaultInjection:
             elif noise_type == 'gaussian':
                 if len(params) == 0:
                     # calculate mean
-                    params.append(np.array(self.values[self.start:self.stop]).mean())
+                    params.append(0)
                     # calculate standard deviation
                     params.append(np.std(self.values[self.start:self.stop]))
                 elif len(params) > 2 or len(params) == 1:
@@ -182,14 +182,14 @@ class FaultInjection:
                                     \nparams[1] typically represents the standard deviation""")
 
                 change_lst = np.random.normal(params[0], params[1], self.fault_length)
-                self.values[self.start:self.stop] = change_lst
+                self.values[self.start:self.stop] += change_lst
 
             elif noise_type == 'uniform':
                 if len(params) == 0:
                     # calculate min value
-                    params.append(0.999 * self.original_average)
+                    params.append(-1 * np.std(self.values[self.start:self.stop]))
                     # calculate max value
-                    params.append(1.001 * self.original_average)
+                    params.append(np.std(self.values[self.start:self.stop]))
                 elif len(params) > 2 or len(params) == 1:
                     raise ValueError("""Params should either be an empty list or it should contain 2 elements.
                                     \nThe values will be used in np.random.uniform(params[0], params[1], fault_length)
@@ -197,7 +197,7 @@ class FaultInjection:
                                     \nparams[1] represents the upper bound""")
 
                 change_lst = np.random.uniform(params[0], params[1], self.fault_length)
-                self.values[self.start:self.stop] = change_lst
+                self.values[self.start:self.stop] += change_lst
             else:
                 raise ValueError('noise_type needs to be \"gaussian\" or \"uniform\" ')
         except ValueError as e:
