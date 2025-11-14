@@ -1,0 +1,6 @@
+matplotlib
+numpy
+pandas
+sphinx
+sphinx-rtd-theme
+sphinx-jsonschema
