@@ -32,7 +32,7 @@ class DataGen:
             else:
                 raise ValueError("Invalid Input (size): \n Value must be a positive int")
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"Initialization error: {e}")
 
         # values starts as an empty list but over time the randomly generated values will be added to it
         self.values = []

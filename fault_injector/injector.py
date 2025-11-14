@@ -130,7 +130,7 @@ class FaultInjection:
             self.fault_length = self.stop - self.start
 
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"FaultInjection initialization error: {e}")
 
     def restore_values(self):
         r"""
@@ -229,7 +229,7 @@ class FaultInjection:
                 raise ValueError("drift_rate needs to be a float or int")
             self.drift_rate = drift_rate
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"FaultInjection initialization error: {e}")
 
         # list of values that equal the amount of change during the fault injection
         change_lst = list(np.array(range(1, self.fault_length + 1)) * self.drift_rate)
@@ -313,7 +313,7 @@ class FaultInjection:
             elif not isinstance(offset_rate, (float, int, np.int64)):
                 raise ValueError("offset_rate needs to be a float or int")
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"FaultInjection initialization error: {e}")
         self.offset_rate = self.original_average * offset_rate
 
         # list of values that equal the amount of change during the fault injection
@@ -440,7 +440,7 @@ class FaultInjection:
             elif not isinstance(stuck_val, (int, float, np.int64)):
                 raise ValueError("stuck_val needs to be a float or an int. To generate a random stuck_val, set to None")
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"FaultInjection initialization error: {e}")
         # list of stuck values
         change_lst = [stuck_val] * self.fault_length
 
@@ -573,7 +573,7 @@ class FaultInjection:
             else:
                 raise ValueError('noise_type needs to be \"gaussian\" or \"uniform\" ')
         except ValueError as e:
-            print(f"Error: {e}")
+            raise ValueError(f"FaultInjection initialization error: {e}")
 
     def plot_compare_values(self):
         """
