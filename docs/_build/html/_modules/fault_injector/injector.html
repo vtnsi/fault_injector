@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fault_injector.injector &mdash; fault_injector  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            fault_injector
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">fault_injector modules</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">fault_injector</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">fault_injector.injector</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for fault_injector.injector</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="FaultInjection">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection">[docs]</a>
+<span class="k">class</span> <span class="nc">FaultInjection</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    FaultInjection(values, start=None, stop=None, increasing=0)</span>
+
+<span class="sd">    A class for injecting various faults into a numeric time-series or sensor data.</span>
+
+<span class="sd">    This class allows simulation of real-world sensor anomalies including</span>
+<span class="sd">    drift, offset, noise, missing data, and stuck readings. Faults can be</span>
+<span class="sd">    applied over a specified range of indices.</span>
+
+<span class="sd">    .. rubric:: Parameters:</span>
+
+<span class="sd">    **values** : *list of float or int*</span>
+<span class="sd">        The original numeric values to inject faults into.</span>
+<span class="sd">    **start** : *int or &#39;random&#39;, optional*</span>
+<span class="sd">        Start index of the fault (default 0). If &#39;random&#39;, a random start is selected.</span>
+<span class="sd">    **stop** : *int or &#39;random&#39;, optional*</span>
+<span class="sd">        Stop index of the fault (default: length of values). Must be greater than start.</span>
+<span class="sd">    **increasing** : *int (0 or 1), optional*</span>
+<span class="sd">        Determines fault direction: 1 = increase values, 0 = decrease values (default 0).</span>
+
+
+<span class="sd">    .. rubric:: Supported Fault Types</span>
+
+<span class="sd">    1. **Drift**:</span>
+<span class="sd">       Linear change over time</span>
+
+<span class="sd">    2. **Offset**:</span>
+<span class="sd">       Constant bias added to the values</span>
+
+<span class="sd">    3. **Gaussian Noise**:</span>
+<span class="sd">       Random noise with normal distribution</span>
+
+<span class="sd">    4. **Uniform Noise**:</span>
+<span class="sd">       Random noise with uniform distribution</span>
+
+<span class="sd">    5. **NaN**:</span>
+<span class="sd">       Replace values with missing data</span>
+
+<span class="sd">    6. **Stuck Value**:</span>
+<span class="sd">       Replace values with a constant</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Faults are applied over the range [start, stop).</span>
+<span class="sd">    - The class preserves the original values for comparison.</span>
+<span class="sd">    - Useful for testing robustness of sensor data processing algorithms,</span>
+<span class="sd">      anomaly detection, and fault-tolerant systems.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">increasing</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The FaultInjection class is designed to take in a list of numeric values and inject a fault into the values</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            values: a list of numeric values</span>
+<span class="sd">            start: defines the starting time for the fault and corresponds with the index values for the elements in the list.</span>
+<span class="sd">                - It must be a non-negative integer less than the length of the values.</span>
+<span class="sd">                - &quot;random&quot; can be used to generate a random starting value.</span>
+<span class="sd">                - Defaults to None.</span>
+<span class="sd">            stop: defines the ending time for the fault and corresponds with the index values for the elements in the list.</span>
+<span class="sd">                - It must be a non-negative integer less than the length of the values and greater than the &#39;start&#39; value.</span>
+<span class="sd">                - &#39;random&#39; can be used to generate a random ending value.</span>
+<span class="sd">                - Defaults to None.</span>
+<span class="sd">            increasing: should be a binary value (0 or 1).</span>
+<span class="sd">                - 1 will cause the fault to increase the values.</span>
+<span class="sd">                - 0 will decrease the values.</span>
+<span class="sd">                - Defaults to 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Check if it&#39;s a non-empty list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">values</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid Input (values): </span><span class="se">\n</span><span class="s2"> values must be a non-empty list of numbers.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Check the type of the first element in the list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid Input (values): </span><span class="se">\n</span><span class="s2"> values must be a list of numbers.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># find the maximum possible length of the fault</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+            <span class="c1"># this variable will receive the fault injection</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># the original values will be preserved and can be used for comparison</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># calculate the average value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_average</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">)</span>
+
+            <span class="c1"># Validate &#39;start&#39;</span>
+            <span class="k">if</span> <span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">start</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid Input (start): </span><span class="se">\n</span><span class="s2"> It must be either:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot; - An integer between 0 and the length of values.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot; - &#39;random&#39; to generate a random starting point.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot; - None to default to 0.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Validate &#39;stop&#39;</span>
+            <span class="k">if</span> <span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span>
+            <span class="k">elif</span> <span class="n">stop</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stop</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">stop</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_end</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid Input (stop): </span><span class="se">\n</span><span class="s2"> &#39;stop&#39; must be an integer between &#39;start&#39; and the length of values,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;or &#39;random&#39; to generate a random endpoint.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="s2">&quot;Set to None to default to the length of values.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Validate &#39;increasing&#39;</span>
+            <span class="k">if</span> <span class="n">increasing</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">}:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fault_direction</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">increasing</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid Input (increasing): </span><span class="se">\n</span><span class="s2"> increasing must be 0 or 1.&quot;</span><span class="p">)</span>
+            <span class="c1"># define the fault length</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FaultInjection.restore_values">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.restore_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">restore_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will revert values back to the original state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FaultInjection.inject_fault">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_fault">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_fault</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change_lst</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This is a generic method that can be used to add custom faults to the original values.</span>
+<span class="sd">        It takes in a list of numeric values that will be added to the existing values.</span>
+<span class="sd">        For example, this method is used by the `inject_drift` method to add the drift values to the existing values.</span>
+
+<span class="sd">        Note: this method is used to add values to the existing values **not** replace the existing values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            change_lst (list): a list of numeric values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># placeholder for unchanged values</span>
+        <span class="n">fault_lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span>
+
+        <span class="c1"># add fault change</span>
+        <span class="n">fault_lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">change_lst</span><span class="p">)</span>
+
+        <span class="c1"># place holder for unchanged ending values</span>
+        <span class="n">unchanged_end_lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+
+        <span class="c1"># combine lists</span>
+        <span class="n">fault_lst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">unchanged_end_lst</span><span class="p">)</span>
+
+        <span class="c1"># add change to values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fault_lst</span><span class="p">)</span>
+
+        <span class="c1"># convert back to a list</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="FaultInjection.inject_drift">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_drift">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_drift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drift_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Injects a linear drift into the signal over the fault range.</span>
+
+<span class="sd">        .. rubric:: Parameters:</span>
+
+<span class="sd">        **drift_rate** : *float, optional*</span>
+<span class="sd">            The rate of change per step. If not provided,</span>
+<span class="sd">            a random small value    is generated as:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \text{drift_rate} = U(0, 0.0001) \times d \times \bar{x}</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`U(a,b)` is a uniform random number in [a, b]</span>
+<span class="sd">                - :math:`d` is the fault direction (+1 for increasing, -1 for decreasing)</span>
+<span class="sd">                - :math:`\bar{x}` is the mean of the original values</span>
+
+<span class="sd">        .. admonition:: Math behind Drift Fault</span>
+
+<span class="sd">            The drift increases (or decreases) linearly with time:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i = x_i + (i - s) \cdot \text{drift_rate}, \quad i \in [s, e)</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`x_i` = original value</span>
+<span class="sd">                - :math:`y_i` = value after drift</span>
+<span class="sd">                - :math:`s` = start index</span>
+<span class="sd">                - :math:`e` = stop index</span>
+
+
+<span class="sd">            **Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean:**</span>
+
+<span class="sd">                The mean of the faulted segment increases (or decreases) linearly by half the</span>
+<span class="sd">                total drift span:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \bar{y}_{[s,e)} = \bar{x}_{[s,e)} + \frac{(e - s - 1)}{2} \cdot \text{drift_rate}</span>
+
+
+<span class="sd">                - **Variance:**</span>
+
+<span class="sd">                The added linear trend increases variance quadratically with the fault length:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \frac{(e - s)^2 - 1}{12} \cdot \text{drift_rate}^2</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">drift_rate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># generate a random drift rate</span>
+                <span class="n">drift_rate</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.0001</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_direction</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_average</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">drift_rate</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;drift_rate needs to be a float or int&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">drift_rate</span> <span class="o">=</span> <span class="n">drift_rate</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># list of values that equal the amount of change during the fault injection</span>
+        <span class="n">change_lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift_rate</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inject_fault</span><span class="p">(</span><span class="n">change_lst</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="FaultInjection.inject_offset">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_offset">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Injects a constant offset (bias) into the signal over the specified fault range.</span>
+
+<span class="sd">        .. rubric:: Parameters:</span>
+
+<span class="sd">        **offset_rate** : *float, optional*</span>
+<span class="sd">            Fraction of the mean value to use as the offset magnitude.</span>
+<span class="sd">            If not provided, a random offset is generated:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \text{offset_rate} \sim U(0.01, 0.1)</span>
+
+<span class="sd">            The actual offset value is computed as:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \text{offset_value} = \bar{x} \cdot \text{offset_rate}</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`U(a,b)` is a uniform random value in [a, b]</span>
+<span class="sd">                - :math:`\bar{x}` is the mean of the original (fault-free) values</span>
+
+<span class="sd">        .. admonition:: Math behind Offset Fault</span>
+
+<span class="sd">            The offset fault adds a constant bias to all values between the fault</span>
+<span class="sd">            start and stop indices:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i =</span>
+<span class="sd">                \begin{cases}</span>
+<span class="sd">                x_i + \text{offset_value}, &amp; \text{if } s \le i &lt; e \\</span>
+<span class="sd">                x_i, &amp; \text{otherwise}</span>
+<span class="sd">                \end{cases}</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`x_i` = original value</span>
+<span class="sd">                - :math:`y_i` = value after offset fault</span>
+<span class="sd">                - :math:`s` = start index</span>
+<span class="sd">                - :math:`e` = stop index</span>
+
+
+<span class="sd">            **Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean:**</span>
+
+<span class="sd">                The mean shifts by the offset magnitude:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \bar{y}_{[s,e)} = \bar{x}_{[s,e)} + \text{offset_value}</span>
+
+<span class="sd">                - **Variance:**</span>
+
+<span class="sd">                Variance remains unchanged since a constant shift does not alter spread:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)})</span>
+
+
+<span class="sd">        The offset direction depends on the `increasing` flag provided at initialization.</span>
+<span class="sd">        If `increasing=1`, the offset is positive; if `increasing=0`, the offset is negative.</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Offset faults model **sensor bias** or **systematic calibration error**, where</span>
+<span class="sd">        readings remain accurate in trend but are consistently higher or lower than</span>
+<span class="sd">        true values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">offset_rate</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">offset_rate</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">offset_rate</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;offset_rate needs to be a float or int&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_average</span> <span class="o">*</span> <span class="n">offset_rate</span>
+
+        <span class="c1"># list of values that equal the amount of change during the fault injection</span>
+        <span class="n">change_lst</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">offset_rate</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inject_fault</span><span class="p">(</span><span class="n">change_lst</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="FaultInjection.inject_nan">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_nan">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_nan</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces all values within the fault range with NaN (Not a Number).</span>
+
+<span class="sd">        This simulates data loss, sensor dropout, or transmission failure,</span>
+<span class="sd">        where no valid measurement is available for a period of time.</span>
+
+<span class="sd">        .. admonition:: Math behind Nan Fault</span>
+
+<span class="sd">            All values between the fault start and stop indices are set to NaN:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i =</span>
+<span class="sd">                \begin{cases}</span>
+<span class="sd">                \text{NaN}, &amp; \text{if } s \le i &lt; e \\</span>
+<span class="sd">                x_i, &amp; \text{otherwise}</span>
+<span class="sd">                \end{cases}</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`x_i` = original value</span>
+<span class="sd">                - :math:`y_i` = value after fault injection</span>
+<span class="sd">                - :math:`s` = start index</span>
+<span class="sd">                - :math:`e` = stop index</span>
+
+
+<span class="sd">            **Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean / Variance:**</span>
+
+<span class="sd">                Undefined within the faulted region because all values are NaN.</span>
+<span class="sd">                In most statistical analyses, these samples are excluded, effectively</span>
+<span class="sd">                reducing the sample size.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This fault type is commonly used to simulate missing data segments in</span>
+<span class="sd">        time series or sensor readings due to disconnection, corruption, or</span>
+<span class="sd">        transmission errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># list of NaN values</span>
+        <span class="n">change_lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="n">change_lst</span></div>
+
+
+
+<div class="viewcode-block" id="FaultInjection.inject_stuck_value">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_stuck_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_stuck_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stuck_val</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replaces all values within the fault range with a constant &quot;stuck&quot; value.</span>
+
+<span class="sd">        This simulates a sensor fault where the output remains frozen at a fixed</span>
+<span class="sd">        reading, regardless of the true input signal.</span>
+
+<span class="sd">        .. rubric:: Parameters:</span>
+
+<span class="sd">        **stuck_val** : *float, optional*</span>
+<span class="sd">            The constant value to use during the fault period.</span>
+<span class="sd">            If not provided, a random stuck value is generated as:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \text{stuck_val} = \bar{x} + d \cdot U(0.01, 0.1) \cdot \bar{x}</span>
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`U(a,b)` is a uniform random number in [a, b]</span>
+<span class="sd">                - :math:`d` is the fault direction (+1 for increasing, -1 for decreasing)</span>
+<span class="sd">                - :math:`\bar{x}` is the mean of the original values</span>
+
+
+<span class="sd">        .. admonition:: Math behind Stuck Value Fault</span>
+
+<span class="sd">            All values between the fault start and stop indices are replaced by a</span>
+<span class="sd">            single constant:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i =</span>
+<span class="sd">                \begin{cases}</span>
+<span class="sd">                c, &amp; \text{if } s \le i &lt; e \\</span>
+<span class="sd">                x_i, &amp; \text{otherwise}</span>
+<span class="sd">                \end{cases}</span>
+
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`x_i` = original value</span>
+<span class="sd">                - :math:`y_i` = value after fault injection</span>
+<span class="sd">                - :math:`c` = stuck value</span>
+<span class="sd">                - :math:`s` = start index</span>
+<span class="sd">                - :math:`e` = stop index</span>
+
+
+<span class="sd">            **Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean:**</span>
+
+<span class="sd">                The mean becomes equal to the stuck constant:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \bar{y}_{[s,e)} = c</span>
+
+<span class="sd">                - **Variance:**</span>
+
+<span class="sd">                All values are identical, so variance collapses to zero:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \text{Var}(y_{[s,e)}) = 0</span>
+
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This fault type is useful for modeling sensor freezing, where a device</span>
+<span class="sd">        stops updating and continuously outputs the same measurement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check stuck_val input</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stuck_val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">stuck_val</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_direction</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_average</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_average</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stuck_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;stuck_val needs to be a float or an int. To generate a random stuck_val, set to None&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># list of stuck values</span>
+        <span class="n">change_lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">stuck_val</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="n">change_lst</span></div>
+
+
+
+<div class="viewcode-block" id="FaultInjection.inject_noise">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.inject_noise">[docs]</a>
+    <span class="k">def</span> <span class="nf">inject_noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">noise_type</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Injects random noise into the signal over the fault range.</span>
+
+<span class="sd">        This simulates measurement noise or sensor variability, and supports</span>
+<span class="sd">        two types of noise distributions: Gaussian (normal) and Uniform.</span>
+
+<span class="sd">        .. rubric:: Parameters:</span>
+
+<span class="sd">        **noise_type** : *str*</span>
+<span class="sd">            Type of noise to inject. Must be either ``&quot;gaussian&quot;`` or ``&quot;uniform&quot;``.</span>
+
+<span class="sd">        **params** : *list, optional*</span>
+<span class="sd">            Parameters defining the noise distribution.</span>
+
+<span class="sd">            - **Gaussian:** `[mu, sigma]`</span>
+<span class="sd">                - `mu` = mean of the noise (default: 0)</span>
+<span class="sd">                - `sigma` = standard deviation (default: std of values[start:stop])</span>
+
+<span class="sd">            - **Uniform:** `[low, high]`</span>
+<span class="sd">                - `low` = lower bound (default: -std of values[start:stop])</span>
+<span class="sd">                - `high` = upper bound (default: std of values[start:stop])</span>
+
+<span class="sd">        .. admonition:: Math behind Noise Fault</span>
+
+<span class="sd">            The values are perturbed by random noise:</span>
+
+<span class="sd">            - **Gaussian noise**:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i = x_i + \epsilon_i, \quad</span>
+<span class="sd">                \epsilon_i \sim \mathcal{N}(\mu, \sigma^2), \quad i \in [s, e)</span>
+
+<span class="sd">            - **Uniform noise**:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                y_i = x_i + \epsilon_i, \quad</span>
+<span class="sd">                \epsilon_i \sim U(a, b), \quad i \in [s, e)</span>
+
+<span class="sd">            where:</span>
+<span class="sd">                - :math:`x_i` = original value</span>
+<span class="sd">                - :math:`y_i` = value after noise injection</span>
+<span class="sd">                - :math:`s` = start index</span>
+<span class="sd">                - :math:`e` = stop index</span>
+<span class="sd">                - :math:`\mathcal{N}(\mu, \sigma^2)` = normal distribution</span>
+<span class="sd">                - :math:`U(a, b)` = uniform distribution in [a, b]</span>
+
+<span class="sd">            **Gausian Noise Fault: Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean:**</span>
+
+<span class="sd">                Expected mean remains approximately unchanged if :math:`\mu = 0`:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \mathbb{E}[\bar{y}_{[s,e)}] = \bar{x}_{[s,e)} + \mu</span>
+
+<span class="sd">                - **Variance:**</span>
+
+<span class="sd">                Total variance increases additively by noise variance:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \sigma^2</span>
+
+
+<span class="sd">            **Uniform Noise Fault: Impact on Descriptive Statistics (within [s, e))**</span>
+
+<span class="sd">                - **Mean:**</span>
+
+<span class="sd">                Expected mean shifts by the midpoint of the uniform range:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \mathbb{E}[\bar{y}_{[s,e)}] = \bar{x}_{[s,e)} + \frac{a + b}{2}</span>
+
+<span class="sd">                - **Variance:**</span>
+
+<span class="sd">                Variance increases by the variance of the uniform noise:</span>
+
+<span class="sd">                .. math::</span>
+<span class="sd">                    \text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \frac{(b - a)^2}{12}.</span>
+
+
+<span class="sd">        Variance increases by the variance of the uniform noise.</span>
+
+<span class="sd">        ---</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This fault type is useful for simulating **sensor variability**, **environmental interference**, or **random jitter** in measurements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;params needs to be a list&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;gaussian&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># calculate mean</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="c1"># calculate standard deviation</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Params should either be an empty list or it should contain 2 elements.</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">The values will be used in np.random.normal(params[0], params[1], fault_length)</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">params[0] typically represents the mean of the distribution</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">params[1] typically represents the standard deviation&quot;&quot;&quot;</span><span class="p">)</span>
+
+                <span class="n">change_lst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span> <span class="o">+=</span> <span class="n">change_lst</span>
+
+            <span class="k">elif</span> <span class="n">noise_type</span> <span class="o">==</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># calculate min value</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]))</span>
+                    <span class="c1"># calculate max value</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]))</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;Params should either be an empty list or it should contain 2 elements.</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">The values will be used in np.random.uniform(params[0], params[1], fault_length)</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">params[0] represents the lower bound</span>
+<span class="s2">                                    </span><span class="se">\n</span><span class="s2">params[1] represents the upper bound&quot;&quot;&quot;</span><span class="p">)</span>
+
+                <span class="n">change_lst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fault_length</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">]</span> <span class="o">+=</span> <span class="n">change_lst</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;noise_type needs to be </span><span class="se">\&quot;</span><span class="s1">gaussian</span><span class="se">\&quot;</span><span class="s1"> or </span><span class="se">\&quot;</span><span class="s1">uniform</span><span class="se">\&quot;</span><span class="s1"> &#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FaultInjection.plot_compare_values">
+<a class="viewcode-back" href="../../api/injector.html#fault_injector.injector.FaultInjection.plot_compare_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_compare_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This method can be used to plot the injected fault and compare it to the original data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># calculate the middle of the original y values</span>
+        <span class="n">y_mid</span> <span class="o">=</span>  <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">)</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+        <span class="c1"># plot the original values</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1f77b4&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Original&quot;</span><span class="p">)</span>
+
+        <span class="c1"># plot the injected values</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#d62728&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Fault&quot;</span><span class="p">)</span>
+
+        <span class="c1"># plot a horizontal line in the middle of the original values</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y_mid</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+        <span class="c1">#plot a vertical line where the fault starts</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)),</span>
+            <span class="n">ymax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1">#plot a vertical line where the fault ends</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span>
+            <span class="n">ymin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)),</span>
+            <span class="n">ymax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+        <span class="c1"># dynamically change the y limits based on the values</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.995</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_values</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.005</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, VTNSI: Dan DeCollo &amp; Stephen Adams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

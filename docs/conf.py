@@ -5,6 +5,9 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 project = 'fault_injector'
 copyright = '2024, VTNSI: Dan DeCollo & Stephen Adams'
@@ -16,8 +19,12 @@ author = 'VTNSI: Dan DeCollo & Stephen Adams'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'sphinx.ext.mathjax',
+    'sphinx_autodoc_typehints',
+    'myst_parser',
 ]
+autodoc_member_order = 'bysource'
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
