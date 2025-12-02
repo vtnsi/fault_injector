@@ -1,12 +1,24 @@
-import numpy as np
-from fault_injector.injector_utils import InjectorUtils
+# -*- coding: utf-8 -*-
+"""
+fault injector class
+"""
 
-class Injector(InjectorUtils):
 
-    def __init__(self, values, start, stop):
-        super().__init__(values, start=start, stop=stop)
 
-    def __call__(self, fault_obj:list, replace_values:bool = False, values=None):
-        if values != None:
-            self.values = values
-        self.inject_fault(change_lst=fault_obj, replace_values=replace_values)
+class Injector:
+    
+    def __init__(self, x, params = None):
+        
+        # TODO: add check for input
+        self.x = x
+        
+        # TODO: add function to setup default params
+        self.start = params['start']
+        self.stop = params['stop']
+        
+        
+    def inject_fault(self, fault):
+        f = fault(self.x[self.start:self.stop])
+        y = self.x.copy()
+        y[self.start:self.stop] = f
+        return y
