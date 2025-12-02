@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-drift fault test
+fault injector test
 """
 
 import numpy as np
@@ -17,8 +17,8 @@ drift = DriftFault(fault_params)
 
 # setup injector and inject fault
 injector_params = {'start': 100, 'stop': 200}
-injector = Injector(x, injector_params)
-y = injector.inject_fault(drift)
+injector = Injector(drift, injector_params)
+y = injector.inject_fault(x)
 
 
 plt.plot(y)
