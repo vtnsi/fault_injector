@@ -1,20 +1,14 @@
-.. fault_injector documentation master file, created by
-   sphinx-quickstart on Wed Nov 20 10:26:35 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to fault_injector's documentation!
+Welcome to Fault Injector's documentation!
 ==========================================
+
+A python package for injecting various faults into a numeric time-series or sensor data.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   introduction
+   installation
+   tutorials/index
+   api/modules
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

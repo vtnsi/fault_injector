@@ -1,5 +1,7 @@
 # Fault_Injection
 
+Fault_Injection documentation can be found (here)[https://vtnsi.github.io/fault_injector/index.html]
+
 ## Introduction
 Fault_Injection is designed inject faults into sensor data. The fault options include:
 - Drift

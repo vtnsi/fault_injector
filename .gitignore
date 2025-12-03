@@ -26,3 +26,5 @@ MANIFEST
 
 # directories in the repo
 data/
+.vscode/
+.ipynb_checkpoints
