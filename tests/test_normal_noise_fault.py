@@ -1,116 +1,89 @@
-import pytest
 import numpy as np
-from unittest.mock import patch
+import pytest
 from fault_injector.fault_lib.normal_noise_fault import NormalNoiseFault
 
-# -------------------------------------------------------------------------
-# Constructor Tests
-# -------------------------------------------------------------------------
 
-def test_normal_noise_fault_init_sets_attributes():
-    nf = NormalNoiseFault(mu=0.5, sigma=1.5)
-    assert nf.name == "Normal (gaussian) noise fault"
-    assert nf.mu == 0.5
-    assert nf.sigma == 1.5
+# Constructor & parameter tests
+def test_default_params():
+    f = NormalNoiseFault()
+    assert f.mu == 0
+    assert f.sigma == 1
 
-def test_normal_noise_fault_init_checks_numeric_input():
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_numeric_input") as chk:
-        NormalNoiseFault(mu=1.0, sigma=2.0)
-        assert chk.call_count == 2
-        chk.assert_any_call(1.0, 'mu')
-        chk.assert_any_call(2.0, 'sigma')
 
-# -------------------------------------------------------------------------
-# Noise Generation Tests
-# -------------------------------------------------------------------------
+def test_custom_numeric_mu_and_sigma():
+    f = NormalNoiseFault(params={'mu': 2, 'sigma':5})
+    assert f.mu == 2
+    assert f.sigma == 5
 
-def test_call_generates_correct_length_array():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    fault_length = 5
-    captured = []
 
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length"), \
-         patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault", side_effect=lambda arr: captured.append(arr)):
+@pytest.mark.parametrize("bad_value", [
+    None,
+    "string",
+    [1, 2, 3],
+    {"a": 1},
+    object()
+])
+def test_invalid_mu_raises(bad_value):
+    with pytest.raises(ValueError, match="mu"):
+        NormalNoiseFault(params={'mu': bad_value, 'sigma':1})
 
-        nf(fault_length)
-        assert len(captured) == 1
-        arr = captured[0]
-        assert len(arr) == fault_length
-        assert np.all(np.isfinite(arr))
 
-def test_call_sets_fault_length_and_fault_values():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    captured = []
+@pytest.mark.parametrize("bad_value", [
+    None,
+    "string",
+    [1, 2, 3],
+    {"a": 1},
+    object(),
+    -1
+])
+def test_invalid_sigma_raises(bad_value):
+    with pytest.raises(ValueError, match="sigma"):
+        NormalNoiseFault(params={'mu':0, 'sigma':bad_value})
 
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length"), \
-         patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault", side_effect=lambda arr: setattr(nf, "fault_values", arr)):
 
-        result = nf(4)
-        assert isinstance(result, np.ndarray)
-        assert len(result) == 4
-        assert result is nf.fault_values
 
-# -------------------------------------------------------------------------
-# Validation Tests
-# -------------------------------------------------------------------------
+@pytest.mark.parametrize("valid_value", [
+    1,
+    2.5,
+    -3,
+    np.int32(5),
+    np.int64(10),
+    np.float32(1.5),
+    np.float64(2.2)
+])
+def test_valid_numeric_mu(valid_value):
+    f = NormalNoiseFault(params={'mu': valid_value, 'sigma':1})
+    assert f.mu == valid_value
 
-def test_call_checks_fault_length_called():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length") as chk, \
-         patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault"):
+@pytest.mark.parametrize("valid_value", [
+    1,
+    2.5,
+    np.int32(5),
+    np.int64(10),
+    np.float32(1.5),
+    np.float64(2.2)
+])
+def test_valid_positive_sigma(valid_value):
+    f = NormalNoiseFault(params={'mu': 0, 'sigma':valid_value})
+    assert f.sigma == valid_value
 
-        nf(7)
-        chk.assert_called_once_with(7)
+# Data type validation tests
+def test_non_array_input_raises():
+    f = NormalNoiseFault()
+    with pytest.raises(ValueError, match="must be an np.ndarray"):
+        f([1, 2, 3])
 
-# -------------------------------------------------------------------------
-# List Output Tests
-# -------------------------------------------------------------------------
 
-def test_list_output_returns_list():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length"), \
-         patch("fault_injector.fault_lib.base_fault.BaseFault._list_output") as lo:
+def test_non_numeric_array_raises():
+    f = NormalNoiseFault()
+    x = np.array(["a", "b", "c"])
+    with pytest.raises(ValueError, match="must contain numeric values"):
+        f(x)
 
-        lo.return_value = ["a", "b"]
-        result = nf(2, list_output=True)
-        lo.assert_called_once()
-        assert result == ["a", "b"]
 
-def test_list_output_skips_update_fault():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length"), \
-         patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault") as uf, \
-         patch("fault_injector.fault_lib.base_fault.BaseFault._list_output"):
+def test_numeric_array_passes():
+    f = NormalNoiseFault()
+    x = np.array([1, 2, 3])
+    out = f(x)
+    assert isinstance(out, np.ndarray)
 
-        nf(3, list_output=True)
-        uf.assert_not_called()
-
-# -------------------------------------------------------------------------
-# Edge Case Tests
-# -------------------------------------------------------------------------
-
-def test_zero_length_rejected():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length") as chk:
-        chk.side_effect = ValueError("invalid length")
-        with pytest.raises(ValueError):
-            nf(0)
-
-def test_negative_length_rejected():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length") as chk:
-        chk.side_effect = ValueError("invalid length")
-        with pytest.raises(ValueError):
-            nf(-10)
-
-# -------------------------------------------------------------------------
-# Randomness Tests
-# -------------------------------------------------------------------------
-
-def test_call_returns_different_values_on_multiple_calls():
-    nf = NormalNoiseFault(mu=0, sigma=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length"):
-
-        vals1 = nf(5)
-        vals2 = nf(5)
-        assert not np.allclose(vals1, vals2)
