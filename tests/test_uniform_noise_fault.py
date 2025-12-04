@@ -1,102 +1,89 @@
-import pytest
 import numpy as np
-from unittest.mock import patch
+import pytest
 from fault_injector.fault_lib.uniform_noise_fault import UniformNoiseFault
 
 
-# -------------------------------------------------------------------------
-# Constructor Tests
-# -------------------------------------------------------------------------
-
-def test_uniform_noise_fault_init_sets_attributes():
-    unf = UniformNoiseFault(min_val=-1.0, max_val=1.0)
-    assert unf.name == "uniform noise fault"
-    assert unf.min_val == -1.0
-    assert unf.max_val == 1.0
+# Constructor & parameter tests
+def test_default_params():
+    f = UniformNoiseFault()
+    assert f.min_val == 0
+    assert f.max_val == 1
 
 
-def test_uniform_noise_fault_init_checks_numeric_input():
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_numeric_input") as chk:
-        UniformNoiseFault(min_val=0.0, max_val=1.0)
-        assert chk.call_count == 2
-        chk.assert_any_call(0.0, 'min_val')
-        chk.assert_any_call(1.0, 'max_val')
+def test_custom_numeric_min_val_and_max_val():
+    f = UniformNoiseFault(params={'min_val': 2, 'max_val':5})
+    assert f.min_val == 2
+    assert f.max_val == 5
 
 
-# -------------------------------------------------------------------------
-# Call Tests
-# -------------------------------------------------------------------------
-
-def test_call_generates_correct_ndarray():
-    np.random.seed(0)
-    unf = UniformNoiseFault(min_val=0, max_val=1)
-    length = 5
-    captured = []
-
-    def mock_update(arr):
-        captured.append(arr)
-        unf.fault_values = arr
-        return arr
-
-    with patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault", side_effect=mock_update):
-        result = unf(length)
-        assert isinstance(result, np.ndarray)
-        assert len(result) == length
-        assert np.all(result >= 0) and np.all(result <= 1)
-        np.testing.assert_array_equal(result, captured[0])
+@pytest.mark.parametrize("bad_value", [
+    None,
+    "string",
+    [1, 2, 3],
+    {"a": 1},
+    object()
+])
+def test_invalid_min_val_raises(bad_value):
+    with pytest.raises(ValueError, match='min_val'):
+        UniformNoiseFault(params={'min_val': bad_value, 'max_val':1})
 
 
-def test_call_generates_correct_list_output():
-    np.random.seed(0)
-    unf = UniformNoiseFault(min_val=0, max_val=1)
-    length = 3
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._list_output") as lo:
-        lo.return_value = [0.1, 0.2, 0.3]
-        result = unf(length, list_output=True)
-        lo.assert_called_once()
-        assert result == [0.1, 0.2, 0.3]
+@pytest.mark.parametrize("bad_value", [
+    None,
+    "string",
+    [1, 2, 3],
+    {"a": 1},
+    object(),
+    -1
+])
+def test_invalid_max_val_raises(bad_value):
+    with pytest.raises(ValueError, match="max_val"):
+        UniformNoiseFault(params={'min_val':0, 'max_val':bad_value})
 
 
-# -------------------------------------------------------------------------
-# Edge Case Tests
-# -------------------------------------------------------------------------
 
-def test_call_length_one():
-    np.random.seed(0)
-    unf = UniformNoiseFault(min_val=0, max_val=2)
-    captured = []
+@pytest.mark.parametrize("valid_value", [
+    1,
+    2.5,
+    -3,
+    np.int32(5),
+    np.int64(10),
+    np.float32(1.5),
+    np.float64(2.2)
+])
+def test_valid_numeric_min_val(valid_value):
+    f = UniformNoiseFault(params={'min_val': valid_value, 'max_val':100})
+    assert f.min_val == valid_value
 
-    def mock_update(arr):
-        captured.append(arr)
-        unf.fault_values = arr
-        return arr
+@pytest.mark.parametrize("valid_value", [
+    1,
+    2.5,
+    np.int32(5),
+    np.int64(10),
+    np.float32(1.5),
+    np.float64(2.2)
+])
+def test_valid_positive_max_val(valid_value):
+    f = UniformNoiseFault(params={'min_val': 0, 'max_val':valid_value})
+    assert f.max_val == valid_value
 
-    with patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault", side_effect=mock_update):
-        result = unf(1)
-        assert result.shape == (1,)
-        np.testing.assert_array_equal(result, captured[0])
-
-
-def test_call_length_zero_raises():
-    unf = UniformNoiseFault(min_val=0, max_val=1)
-    with pytest.raises(ValueError):
-        unf(0)
-
-
-def test_min_equals_max():
-    unf = UniformNoiseFault(min_val=5, max_val=5)
-    result = unf(3)
-    expected = np.array([5, 5, 5])
-    np.testing.assert_array_equal(result, expected)
+# Data type validation tests
+def test_non_array_input_raises():
+    f = UniformNoiseFault()
+    with pytest.raises(ValueError, match="must be an np.ndarray"):
+        f([1, 2, 3])
 
 
-# -------------------------------------------------------------------------
-# Type Validation Tests
-# -------------------------------------------------------------------------
+def test_non_numeric_array_raises():
+    f = UniformNoiseFault()
+    x = np.array(["a", "b", "c"])
+    with pytest.raises(ValueError, match="must contain numeric values"):
+        f(x)
 
-def test_call_checks_fault_length_called():
-    unf = UniformNoiseFault(min_val=0, max_val=1)
-    with patch("fault_injector.fault_lib.base_fault.BaseFault._check_fault_length") as chk, \
-         patch("fault_injector.fault_lib.base_fault.BaseFault.update_fault"):
-        unf(4)
-        chk.assert_called_once_with(4)
+
+def test_numeric_array_passes():
+    f = UniformNoiseFault()
+    x = np.array([1, 2, 3])
+    out = f(x)
+    assert isinstance(out, np.ndarray)
+
