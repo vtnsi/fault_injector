@@ -51,7 +51,7 @@ class DataFrameInjector:
             raise ValueError('injector_dict must be a dictionary')
 
         for col, f in self.injector_dict.items():
-            self._check_fault_instance(self, f, col)
+            self._check_fault_instance(f, col)
 
 
     def _check_df_and_injector_dict(self, df):
