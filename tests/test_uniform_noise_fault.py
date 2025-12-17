@@ -70,8 +70,8 @@ def test_valid_positive_max_val(valid_value):
 # Data type validation tests
 def test_non_array_input_raises():
     f = UniformNoiseFault()
-    with pytest.raises(ValueError, match="must be an np.ndarray"):
-        f([1, 2, 3])
+    with pytest.raises(ValueError, match=r"Invalid 'x': must be array-like \(list, tuple, np\.ndarray\)"):
+        f("test")
 
 
 def test_non_numeric_array_raises():
@@ -87,3 +87,8 @@ def test_numeric_array_passes():
     out = f(x)
     assert isinstance(out, np.ndarray)
 
+def test_numeric_list_passes():
+    f = UniformNoiseFault()
+    x = [1, 2, 3]
+    out = f(x)
+    assert isinstance(out, np.ndarray)

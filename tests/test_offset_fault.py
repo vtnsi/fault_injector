@@ -43,8 +43,8 @@ def test_valid_numeric_offset_by(valid_value):
 # Data type validation tests
 def test_non_array_input_raises():
     f = OffsetFault()
-    with pytest.raises(ValueError, match="must be an np.ndarray"):
-        f([1, 2, 3])
+    with pytest.raises(ValueError, match=r"Invalid 'x': must be array-like \(list, tuple, np\.ndarray\)"):
+        f("test")
 
 
 def test_non_numeric_array_raises():
@@ -68,6 +68,11 @@ def test_offset_default_rate():
     expected = x + np.array([1, 1, 1])
     np.testing.assert_array_equal(f(x), expected)
 
+def test_offset_list():
+    f = OffsetFault()
+    x = [10, 10, 10]
+    expected = np.asarray(x) + np.array([1, 1, 1])
+    np.testing.assert_array_equal(f(x), expected)
 
 def test_offset_custom_rate():
     f = OffsetFault(params={'offset_by': 2})
