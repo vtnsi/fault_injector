@@ -1,105 +1,67 @@
-import pytest
 import numpy as np
-from unittest.mock import patch
+import pytest
 from fault_injector.fault_lib.base_fault import BaseFault
-import matplotlib.pyplot as plt
 
-# -------------------------------------------------------------------------
-# Constructor Tests
-# -------------------------------------------------------------------------
 
-def test_init_with_name_only():
-    bf = BaseFault(name="custom")
-    assert bf.name == "custom"
-    assert bf.fault_values is None
-    assert bf.fault_length is None
+# Constructor tests
+def test_default_constructor():
+    f = BaseFault()
+    assert f.name == "base_fault"
 
-def test_init_with_default_name():
-    bf = BaseFault()
-    assert bf.name == "base fault"
-    assert bf.fault_values is None
-    assert bf.fault_length is None
 
-def test_init_with_fault_values():
-    vals = np.array([1, 2, 3])
-    bf = BaseFault(fault_values=vals)
-    # BaseFault should store the fault_values and length correctly
-    assert np.array_equal(bf.fault_values, vals)
-    assert bf.fault_length == 3
+# __call__ behavior tests
+def test_call_returns_input_unchanged():
+    f = BaseFault()
+    x = np.array([1, 2, 3])
+    out = f(x)
+    np.testing.assert_array_equal(out, x)
 
-def test_init_with_fault_length():
-    bf = BaseFault(fault_length=5)
-    assert bf.fault_length == 5
-    assert isinstance(bf.fault_values, np.ndarray)
-    assert np.all(bf.fault_values == 0)
-
-def test_init_none_args():
-    bf = BaseFault()
-    assert bf.fault_values is None
-    assert bf.fault_length is None
-
-# -------------------------------------------------------------------------
-# __call__ Tests
-# -------------------------------------------------------------------------
-
-def test_call_with_array():
-    bf = BaseFault()
-    arr = np.array([5, 6, 7])
-    result = bf(arr)
-    assert np.array_equal(result, arr)
-    assert np.array_equal(bf.fault_values, arr)
-    assert bf.fault_length == 3
 
 def test_call_with_list():
-    bf = BaseFault()
-    data = [1, 2, 3]
-    result = bf(data)
-    assert isinstance(result, list)
-    assert result == data
-    assert bf.fault_length == 3
+    f = BaseFault()
+    x = [1, 2, 3]
+    out = f(x)
+    assert out == x
 
-def test_call_with_int_creates_zero_array():
-    bf = BaseFault()
-    length = 4
-    result = bf(length)
-    assert isinstance(result, np.ndarray)
-    assert result.shape[0] == length
-    assert np.all(result == 0)
 
-def test_call_list_output_returns_list():
-    bf = BaseFault()
-    arr = np.array([1, 2, 3])
-    result = bf(arr, list_output=True)
-    assert isinstance(result, list)
-    assert result == [1, 2, 3]
+# _check_data_type tests
+@pytest.mark.parametrize("bad_value", [
+    None,
+    5,
+    "string",
+    {"a": 1},
+    object()
+])
+def test_check_data_type_non_array_like_raises(bad_value):
+    f = BaseFault()
+    with pytest.raises(ValueError, match="array-like"):
+        f._check_data_type(bad_value)
 
-# -------------------------------------------------------------------------
-# plot_fault Tests
-# -------------------------------------------------------------------------
 
-def test_plot_fault_runs(monkeypatch):
-    bf = BaseFault()
-    bf.fault_values = np.array([1, 2, 3])
-    bf.fault_length = 3
+def test_check_data_type_non_numeric_array_raises():
+    f = BaseFault()
+    x = ["a", "b", "c"]
+    with pytest.raises(ValueError, match="numeric values"):
+        f._check_data_type(x)
 
-    plotted = {"called": False}
 
-    def fake_show():
-        plotted["called"] = True
+@pytest.mark.parametrize("valid_value", [
+    [1, 2, 3],
+    (1.0, 2.0, 3.0),
+    np.array([1, 2, 3]),
+    np.array([1.5, 2.5, 3.5]),
+    np.array([1, 2, 3], dtype=np.int32),
+    np.array([1, 2, 3], dtype=np.float64),
+])
+def test_check_data_type_numeric_array_passes(valid_value):
+    f = BaseFault()
+    out = f._check_data_type(valid_value)
+    assert isinstance(out, np.ndarray)
 
-    monkeypatch.setattr(plt, "show", fake_show)
 
-    # Should not raise
-    bf.plot_fault(title="Test Plot", y_units="units")
-    assert plotted["called"], "plt.show() should be called"
-
-# -------------------------------------------------------------------------
-# State consistency
-# -------------------------------------------------------------------------
-
-def test_fault_state_after_call():
-    bf = BaseFault()
-    arr = np.array([9, 8, 7, 6])
-    bf(arr)
-    assert bf.fault_length == len(arr)
-    assert np.array_equal(bf.fault_values, arr)
+def test_check_data_type_returns_numpy_array():
+    f = BaseFault()
+    x = [1, 2, 3]
+    out = f._check_data_type(x)
+    assert isinstance(out, np.ndarray)
+    np.testing.assert_array_equal(out, np.array(x))
