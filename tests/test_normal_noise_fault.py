@@ -70,8 +70,8 @@ def test_valid_positive_sigma(valid_value):
 # Data type validation tests
 def test_non_array_input_raises():
     f = NormalNoiseFault()
-    with pytest.raises(ValueError, match="must be an np.ndarray"):
-        f([1, 2, 3])
+    with pytest.raises(ValueError, match=r"Invalid 'x': must be array-like \(list, tuple, np\.ndarray\)"):
+        f("test")
 
 
 def test_non_numeric_array_raises():

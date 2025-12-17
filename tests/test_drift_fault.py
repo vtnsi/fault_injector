@@ -17,7 +17,6 @@ def test_custom_numeric_drift_rate():
 @pytest.mark.parametrize("bad_value", [
     None,
     "string",
-    [1, 2, 3],
     {"a": 1},
     object()
 ])
@@ -38,13 +37,6 @@ def test_invalid_drift_rate_raises(bad_value):
 def test_valid_numeric_drift_rate(valid_value):
     f = DriftFault(params={'drift_rate': valid_value})
     assert f.drift_rate == valid_value
-
-
-# Data type validation tests
-def test_non_array_input_raises():
-    f = DriftFault()
-    with pytest.raises(ValueError, match="must be an np.ndarray"):
-        f([1, 2, 3])
 
 
 def test_non_numeric_array_raises():
@@ -76,6 +68,13 @@ def test_drift_custom_rate():
     expected = x + drift
     np.testing.assert_array_equal(f(x), expected)
 
+
+def test_drift_list_value():
+    f = DriftFault(params={'drift_rate': 2})
+    x = [5, 5, 5, 5]
+    drift = np.array([2, 4, 6, 8])
+    expected = np.asarray(x) + drift
+    np.testing.assert_array_equal(f(x), expected)
 
 def test_negative_drift_rate():
     # Negative step still produces a drift sequence

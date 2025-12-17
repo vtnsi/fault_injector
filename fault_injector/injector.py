@@ -4,6 +4,7 @@ fault injector class
 """
 import numpy as np
 from numbers import Number
+from numpy.typing import ArrayLike
 
 
 class Injector:
@@ -37,17 +38,17 @@ class Injector:
         self._initial_check_params()
 
 
-    def inject_fault(self, x:np.ndarray) -> np.ndarray:
+    def inject_fault(self, x:ArrayLike) -> np.ndarray:
         """
         Inject the fault into the data
 
         Args:
-            x (np.ndarray): the original values that will get the fault injected into it
+            x (ArrayLike): the original values that will get the fault injected into it
 
         Returns:
             np.ndarray: the updated values after the fault is injected into it
         """
-        self._check_data_type(x)
+        x = self._check_data_type(x)
         self._check_params(x)
 
         x = x.copy()
@@ -93,12 +94,12 @@ class Injector:
             raise ValueError(f"Invalid 'stop': \n must be an int type (int, np.int64, np.int32).")
 
 
-    def _check_data_type(self, x:np.array):
+    def _check_data_type(self, x:ArrayLike):
         """
         Check that x is an array containing numeric values
 
         Args:
-            x (np.ndarray): array containing numeric values that represent the original value
+            x (ArrayLike): array containing numeric values that represent the original value
 
         Raises:
             ValueError: 'x' must be an array
@@ -106,10 +107,17 @@ class Injector:
 
         """
 
-        if not isinstance(x, np.ndarray):
-            raise ValueError(f"Invalid 'x': \n must be an np.ndarray")
-        elif not np.issubdtype(x.dtype, np.number):
+        if not isinstance(x, (list, tuple, np.ndarray)):
+            raise ValueError(
+                "Invalid 'x': must be array-like (list, tuple, np.ndarray)"
+            )
+
+        x = np.asarray(x)
+
+        if not np.issubdtype(x.dtype, np.number):
             raise ValueError(f"Invalid 'x': \n must contain numeric values")
+
+        return x
 
 
     def _check_params(self, x):
