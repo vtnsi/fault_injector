@@ -8,16 +8,13 @@ from numbers import Number
 from numpy.typing import ArrayLike
 
 class DriftFault(BaseFault):
+    """
+    Simulate a Drift Fault: a gradual, systematic deviation of sensor readings from their true values over time.
+
+    Args:
+        params (dict, optional): Dictionary containing the `drift_rate` key. `drift_rate` corresponds to the slope of the fault-induced offset. If None, defaults to `drift_rate` of 1.
+    """
     def __init__(self, params:dict = None):
-        r"""
-        DriftFault
-        ----------
-
-        Args
-        ----
-        params (dict):
-
-        """
         self.name = 'drift_fault'
 
         if params is None:

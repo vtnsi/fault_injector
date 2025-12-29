@@ -9,6 +9,7 @@ Requirements
 - Python ≥ 3.8
 - NumPy
 - Matplotlib
+- Pandas
 
 Install via GitHub
 ------------------
@@ -43,5 +44,7 @@ Importing
 
 .. code-block:: python
 
+    from fault_injector.fault_lib import *
     import fault_injector.injector as injector
+    import fault_injector.df_injector as df_injector
     import fault_injector.generate_data as gd

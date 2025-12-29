@@ -16,10 +16,11 @@
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Tutorials" href="tutorials/index.html" />
+    <link rel="next" title="Sensor Faults" href="faults/index.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
@@ -53,8 +54,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#importing">Importing</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faults/index.html">Sensor Faults</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">fault_injector modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos/index.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -91,6 +93,7 @@ faults in time-series or sensor data.</p>
 <li><p>Python ≥ 3.8</p></li>
 <li><p>NumPy</p></li>
 <li><p>Matplotlib</p></li>
+<li><p>Pandas</p></li>
 </ul>
 </section>
 <section id="install-via-github">
@@ -118,7 +121,9 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
 </section>
 <section id="importing">
 <h2>Importing<a class="headerlink" href="#importing" title="Link to this heading"></a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fault_injector.injector</span> <span class="k">as</span> <span class="nn">injector</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fault_injector.fault_lib</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">fault_injector.injector</span> <span class="k">as</span> <span class="nn">injector</span>
+<span class="kn">import</span> <span class="nn">fault_injector.df_injector</span> <span class="k">as</span> <span class="nn">df_injector</span>
 <span class="kn">import</span> <span class="nn">fault_injector.generate_data</span> <span class="k">as</span> <span class="nn">gd</span>
 </pre></div>
 </div>
@@ -130,7 +135,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </s
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="faults/index.html" class="btn btn-neutral float-right" title="Sensor Faults" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

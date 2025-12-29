@@ -28,3 +28,7 @@ MANIFEST
 data/
 .vscode/
 .ipynb_checkpoints
+
+# Re-include the 'images' folder and all its contents
+!images/
+!images/**/**/*.png

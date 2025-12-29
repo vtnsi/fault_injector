@@ -16,12 +16,12 @@
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fault_injector.generate_data module" href="generate_data.html" />
-    <link rel="prev" title="fault_injector modules" href="modules.html" /> 
+    <link rel="next" title="fault_injector.df_injector module" href="df_injector.html" />
+    <link rel="prev" title="fault_injector.fault_lib module" href="fault_lib.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,26 +47,23 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">fault_injector modules</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">fault_injector.injector module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#fault_injector.injector.FaultInjection"><code class="docutils literal notranslate"><span class="pre">FaultInjection</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.restore_values"><code class="docutils literal notranslate"><span class="pre">FaultInjection.restore_values()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_fault"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_fault()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_drift"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_drift()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_offset"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_offset()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_nan"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_nan()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_stuck_value"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_stuck_value()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.inject_noise"><code class="docutils literal notranslate"><span class="pre">FaultInjection.inject_noise()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.FaultInjection.plot_compare_values"><code class="docutils literal notranslate"><span class="pre">FaultInjection.plot_compare_values()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="generate_data.html">fault_injector.generate_data module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_frame_injector.html">fault_injector.data_frame_injector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html">fault_injector.fault_lib module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">fault_injector.injector module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fault_injector.injector.Injector"><code class="docutils literal notranslate"><span class="pre">Injector</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.Injector.inject_fault"><code class="docutils literal notranslate"><span class="pre">Injector.inject_fault()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fault_injector.injector.Injector.check_fault_instance"><code class="docutils literal notranslate"><span class="pre">Injector.check_fault_instance()</span></code></a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="df_injector.html">fault_injector.df_injector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">fault_injector.FaultVisualizer module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../demos/index.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -96,386 +93,51 @@
              
   <section id="module-fault_injector.injector">
 <span id="fault-injector-injector-module"></span><h1>fault_injector.injector module<a class="headerlink" href="#module-fault_injector.injector" title="Link to this heading"></a></h1>
+<p>fault injector class</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fault_injector.injector.</span></span><span class="sig-name descname"><span class="pre">FaultInjection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increasing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="fault_injector.injector.Injector">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fault_injector.injector.</span></span><span class="sig-name descname"><span class="pre">Injector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#Injector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.Injector" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class for injecting various faults into a numeric time-series or sensor data.</p>
-<p>This class allows simulation of real-world sensor anomalies including
-drift, offset, noise, missing data, and stuck readings. Faults can be
-applied over a specified range of indices.</p>
-<p class="rubric">Parameters:</p>
-<dl>
-<dt><strong>values</strong><span class="classifier"><em>list of float or int</em></span></dt><dd><p>The original numeric values to inject faults into.</p>
-</dd>
-<dt><strong>start</strong><span class="classifier"><em>int or ‘random’, optional</em></span></dt><dd><p>Start index of the fault (default 0). If ‘random’, a random start is selected.</p>
-</dd>
-<dt><strong>stop</strong><span class="classifier"><em>int or ‘random’, optional</em></span></dt><dd><p>Stop index of the fault (default: length of values). Must be greater than start.</p>
-</dd>
-<dt><strong>increasing</strong><span class="classifier"><em>int (0 or 1), optional</em></span></dt><dd><p>Determines fault direction: 1 = increase values, 0 = decrease values (default 0).</p>
-</dd>
-</dl>
-<p class="rubric">Supported Fault Types</p>
-<ol class="arabic simple">
-<li><p><strong>Drift</strong>:
-Linear change over time</p></li>
-<li><p><strong>Offset</strong>:
-Constant bias added to the values</p></li>
-<li><p><strong>Gaussian Noise</strong>:
-Random noise with normal distribution</p></li>
-<li><p><strong>Uniform Noise</strong>:
-Random noise with uniform distribution</p></li>
-<li><p><strong>NaN</strong>:
-Replace values with missing data</p></li>
-<li><p><strong>Stuck Value</strong>:
-Replace values with a constant</p></li>
-</ol>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>Faults are applied over the range [start, stop).</p></li>
-<li><p>The class preserves the original values for comparison.</p></li>
-<li><p>Useful for testing robustness of sensor data processing algorithms,
-anomaly detection, and fault-tolerant systems.</p></li>
-</ul>
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.restore_values">
-<span class="sig-name descname"><span class="pre">restore_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.restore_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.restore_values" title="Link to this definition"></a></dt>
-<dd><p>This will revert values back to the original state</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_fault">
-<span class="sig-name descname"><span class="pre">inject_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">change_lst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_fault"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_fault" title="Link to this definition"></a></dt>
-<dd><p>This is a generic method that can be used to add custom faults to the original values.
-It takes in a list of numeric values that will be added to the existing values.
-For example, this method is used by the <cite>inject_drift</cite> method to add the drift values to the existing values.</p>
-<p>Note: this method is used to add values to the existing values <strong>not</strong> replace the existing values.</p>
+<p>Class designed to help generate and inject faults into data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>change_lst</strong> (<em>list</em>) – a list of numeric values</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fault</strong> – _description_</p></li>
+<li><p><strong>params</strong> (<em>dict</em><em>, </em><em>optional</em>) – params should include the start and stop keys. These values default to:
+- start (int): this corresponds to the starting index for the fault. defaults to 0.
+- stop (int): this corresponds to the ending index for the fault. defaults to -1.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fault_injector.injector.Injector.inject_fault">
+<span class="sig-name descname"><span class="pre">inject_fault</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#Injector.inject_fault"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.Injector.inject_fault" title="Link to this definition"></a></dt>
+<dd><p>Inject the fault into the data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – the original values that will get the fault injected into it</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the updated values after the fault is injected into it</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_drift">
-<span class="sig-name descname"><span class="pre">inject_drift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drift_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_drift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_drift" title="Link to this definition"></a></dt>
-<dd><p>Injects a linear drift into the signal over the fault range.</p>
-<p class="rubric">Parameters:</p>
-<dl>
-<dt><strong>drift_rate</strong><span class="classifier"><em>float, optional</em></span></dt><dd><p>The rate of change per step. If not provided,
-a random small value    is generated as:</p>
-<div class="math notranslate nohighlight">
-\[\text{drift_rate} = U(0, 0.0001) \times d \times \bar{x}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(U(a,b)\)</span> is a uniform random number in [a, b]</p></li>
-<li><p><span class="math notranslate nohighlight">\(d\)</span> is the fault direction (+1 for increasing, -1 for decreasing)</p></li>
-<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span> is the mean of the original values</p></li>
-</ul>
+<dt class="sig sig-object py" id="fault_injector.injector.Injector.check_fault_instance">
+<span class="sig-name descname"><span class="pre">check_fault_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fault</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#Injector.check_fault_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.Injector.check_fault_instance" title="Link to this definition"></a></dt>
+<dd><p>Check that fault is a fault class instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fault</strong> – fault variable used during initialization</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – _description_</p>
 </dd>
 </dl>
-</dd>
-</dl>
-<div class="admonition-math-behind-drift-fault admonition">
-<p class="admonition-title">Math behind Drift Fault</p>
-<p>The drift increases (or decreases) linearly with time:</p>
-<div class="math notranslate nohighlight">
-\[y_i = x_i + (i - s) \cdot \text{drift_rate}, \quad i \in [s, e)\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_i\)</span> = original value</p></li>
-<li><p><span class="math notranslate nohighlight">\(y_i\)</span> = value after drift</p></li>
-<li><p><span class="math notranslate nohighlight">\(s\)</span> = start index</p></li>
-<li><p><span class="math notranslate nohighlight">\(e\)</span> = stop index</p></li>
-</ul>
-</dd>
-</dl>
-<p><strong>Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean:</strong></p></li>
-</ul>
-<p>The mean of the faulted segment increases (or decreases) linearly by half the
-total drift span:</p>
-<div class="math notranslate nohighlight">
-\[\bar{y}_{[s,e)} = \bar{x}_{[s,e)} + \frac{(e - s - 1)}{2} \cdot \text{drift_rate}\]</div>
-<ul class="simple">
-<li><p><strong>Variance:</strong></p></li>
-</ul>
-<p>The added linear trend increases variance quadratically with the fault length:</p>
-<div class="math notranslate nohighlight">
-\[\text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \frac{(e - s)^2 - 1}{12} \cdot \text{drift_rate}^2\]</div>
-</div></blockquote>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_offset">
-<span class="sig-name descname"><span class="pre">inject_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_offset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_offset" title="Link to this definition"></a></dt>
-<dd><p>Injects a constant offset (bias) into the signal over the specified fault range.</p>
-<p class="rubric">Parameters:</p>
-<dl>
-<dt><strong>offset_rate</strong><span class="classifier"><em>float, optional</em></span></dt><dd><p>Fraction of the mean value to use as the offset magnitude.
-If not provided, a random offset is generated:</p>
-<div class="math notranslate nohighlight">
-\[\text{offset_rate} \sim U(0.01, 0.1)\]</div>
-<p>The actual offset value is computed as:</p>
-<div class="math notranslate nohighlight">
-\[\text{offset_value} = \bar{x} \cdot \text{offset_rate}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(U(a,b)\)</span> is a uniform random value in [a, b]</p></li>
-<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span> is the mean of the original (fault-free) values</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-<div class="admonition-math-behind-offset-fault admonition">
-<p class="admonition-title">Math behind Offset Fault</p>
-<p>The offset fault adds a constant bias to all values between the fault
-start and stop indices:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}y_i =
-\begin{cases}
-x_i + \text{offset_value}, &amp; \text{if } s \le i &lt; e \\
-x_i, &amp; \text{otherwise}
-\end{cases}\end{split}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_i\)</span> = original value</p></li>
-<li><p><span class="math notranslate nohighlight">\(y_i\)</span> = value after offset fault</p></li>
-<li><p><span class="math notranslate nohighlight">\(s\)</span> = start index</p></li>
-<li><p><span class="math notranslate nohighlight">\(e\)</span> = stop index</p></li>
-</ul>
-</dd>
-</dl>
-<p><strong>Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean:</strong></p></li>
-</ul>
-<p>The mean shifts by the offset magnitude:</p>
-<div class="math notranslate nohighlight">
-\[\bar{y}_{[s,e)} = \bar{x}_{[s,e)} + \text{offset_value}\]</div>
-<ul class="simple">
-<li><p><strong>Variance:</strong></p></li>
-</ul>
-<p>Variance remains unchanged since a constant shift does not alter spread:</p>
-<div class="math notranslate nohighlight">
-\[\text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)})\]</div>
-</div></blockquote>
-</div>
-<p>The offset direction depends on the <cite>increasing</cite> flag provided at initialization.
-If <cite>increasing=1</cite>, the offset is positive; if <cite>increasing=0</cite>, the offset is negative.</p>
-<p class="rubric">Notes</p>
-<p>Offset faults model <strong>sensor bias</strong> or <strong>systematic calibration error</strong>, where
-readings remain accurate in trend but are consistently higher or lower than
-true values.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_nan">
-<span class="sig-name descname"><span class="pre">inject_nan</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_nan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_nan" title="Link to this definition"></a></dt>
-<dd><p>Replaces all values within the fault range with NaN (Not a Number).</p>
-<p>This simulates data loss, sensor dropout, or transmission failure,
-where no valid measurement is available for a period of time.</p>
-<div class="admonition-math-behind-nan-fault admonition">
-<p class="admonition-title">Math behind Nan Fault</p>
-<p>All values between the fault start and stop indices are set to NaN:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}y_i =
-\begin{cases}
-\text{NaN}, &amp; \text{if } s \le i &lt; e \\
-x_i, &amp; \text{otherwise}
-\end{cases}\end{split}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_i\)</span> = original value</p></li>
-<li><p><span class="math notranslate nohighlight">\(y_i\)</span> = value after fault injection</p></li>
-<li><p><span class="math notranslate nohighlight">\(s\)</span> = start index</p></li>
-<li><p><span class="math notranslate nohighlight">\(e\)</span> = stop index</p></li>
-</ul>
-</dd>
-</dl>
-<p><strong>Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean / Variance:</strong></p></li>
-</ul>
-<p>Undefined within the faulted region because all values are NaN.
-In most statistical analyses, these samples are excluded, effectively
-reducing the sample size.</p>
-</div></blockquote>
-</div>
-<p class="rubric">Notes</p>
-<p>This fault type is commonly used to simulate missing data segments in
-time series or sensor readings due to disconnection, corruption, or
-transmission errors.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_stuck_value">
-<span class="sig-name descname"><span class="pre">inject_stuck_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stuck_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_stuck_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_stuck_value" title="Link to this definition"></a></dt>
-<dd><p>Replaces all values within the fault range with a constant “stuck” value.</p>
-<p>This simulates a sensor fault where the output remains frozen at a fixed
-reading, regardless of the true input signal.</p>
-<p class="rubric">Parameters:</p>
-<dl>
-<dt><strong>stuck_val</strong><span class="classifier"><em>float, optional</em></span></dt><dd><p>The constant value to use during the fault period.
-If not provided, a random stuck value is generated as:</p>
-<div class="math notranslate nohighlight">
-\[\text{stuck_val} = \bar{x} + d \cdot U(0.01, 0.1) \cdot \bar{x}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(U(a,b)\)</span> is a uniform random number in [a, b]</p></li>
-<li><p><span class="math notranslate nohighlight">\(d\)</span> is the fault direction (+1 for increasing, -1 for decreasing)</p></li>
-<li><p><span class="math notranslate nohighlight">\(\bar{x}\)</span> is the mean of the original values</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-<div class="admonition-math-behind-stuck-value-fault admonition">
-<p class="admonition-title">Math behind Stuck Value Fault</p>
-<p>All values between the fault start and stop indices are replaced by a
-single constant:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}y_i =
-\begin{cases}
-c, &amp; \text{if } s \le i &lt; e \\
-x_i, &amp; \text{otherwise}
-\end{cases}\end{split}\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_i\)</span> = original value</p></li>
-<li><p><span class="math notranslate nohighlight">\(y_i\)</span> = value after fault injection</p></li>
-<li><p><span class="math notranslate nohighlight">\(c\)</span> = stuck value</p></li>
-<li><p><span class="math notranslate nohighlight">\(s\)</span> = start index</p></li>
-<li><p><span class="math notranslate nohighlight">\(e\)</span> = stop index</p></li>
-</ul>
-</dd>
-</dl>
-<p><strong>Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean:</strong></p></li>
-</ul>
-<p>The mean becomes equal to the stuck constant:</p>
-<div class="math notranslate nohighlight">
-\[\bar{y}_{[s,e)} = c\]</div>
-<ul class="simple">
-<li><p><strong>Variance:</strong></p></li>
-</ul>
-<p>All values are identical, so variance collapses to zero:</p>
-<div class="math notranslate nohighlight">
-\[\text{Var}(y_{[s,e)}) = 0\]</div>
-</div></blockquote>
-</div>
-<p class="rubric">Notes</p>
-<p>This fault type is useful for modeling sensor freezing, where a device
-stops updating and continuously outputs the same measurement.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.inject_noise">
-<span class="sig-name descname"><span class="pre">inject_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noise_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.inject_noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.inject_noise" title="Link to this definition"></a></dt>
-<dd><p>Injects random noise into the signal over the fault range.</p>
-<p>This simulates measurement noise or sensor variability, and supports
-two types of noise distributions: Gaussian (normal) and Uniform.</p>
-<p class="rubric">Parameters:</p>
-<dl>
-<dt><strong>noise_type</strong><span class="classifier"><em>str</em></span></dt><dd><p>Type of noise to inject. Must be either <code class="docutils literal notranslate"><span class="pre">&quot;gaussian&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code>.</p>
-</dd>
-<dt><strong>params</strong><span class="classifier"><em>list, optional</em></span></dt><dd><p>Parameters defining the noise distribution.</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt><strong>Gaussian:</strong> <cite>[mu, sigma]</cite></dt><dd><ul>
-<li><p><cite>mu</cite> = mean of the noise (default: 0)</p></li>
-<li><p><cite>sigma</cite> = standard deviation (default: std of values[start:stop])</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt><strong>Uniform:</strong> <cite>[low, high]</cite></dt><dd><ul>
-<li><p><cite>low</cite> = lower bound (default: -std of values[start:stop])</p></li>
-<li><p><cite>high</cite> = upper bound (default: std of values[start:stop])</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-<div class="admonition-math-behind-noise-fault admonition">
-<p class="admonition-title">Math behind Noise Fault</p>
-<p>The values are perturbed by random noise:</p>
-<ul class="simple">
-<li><p><strong>Gaussian noise</strong>:</p></li>
-</ul>
-<div class="math notranslate nohighlight">
-\[y_i = x_i + \epsilon_i, \quad
-\epsilon_i \sim \mathcal{N}(\mu, \sigma^2), \quad i \in [s, e)\]</div>
-<ul class="simple">
-<li><p><strong>Uniform noise</strong>:</p></li>
-</ul>
-<div class="math notranslate nohighlight">
-\[y_i = x_i + \epsilon_i, \quad
-\epsilon_i \sim U(a, b), \quad i \in [s, e)\]</div>
-<dl class="simple">
-<dt>where:</dt><dd><ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(x_i\)</span> = original value</p></li>
-<li><p><span class="math notranslate nohighlight">\(y_i\)</span> = value after noise injection</p></li>
-<li><p><span class="math notranslate nohighlight">\(s\)</span> = start index</p></li>
-<li><p><span class="math notranslate nohighlight">\(e\)</span> = stop index</p></li>
-<li><p><span class="math notranslate nohighlight">\(\mathcal{N}(\mu, \sigma^2)\)</span> = normal distribution</p></li>
-<li><p><span class="math notranslate nohighlight">\(U(a, b)\)</span> = uniform distribution in [a, b]</p></li>
-</ul>
-</dd>
-</dl>
-<p><strong>Gausian Noise Fault: Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean:</strong></p></li>
-</ul>
-<p>Expected mean remains approximately unchanged if <span class="math notranslate nohighlight">\(\mu = 0\)</span>:</p>
-<div class="math notranslate nohighlight">
-\[\mathbb{E}[\bar{y}_{[s,e)}] = \bar{x}_{[s,e)} + \mu\]</div>
-<ul class="simple">
-<li><p><strong>Variance:</strong></p></li>
-</ul>
-<p>Total variance increases additively by noise variance:</p>
-<div class="math notranslate nohighlight">
-\[\text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \sigma^2\]</div>
-</div></blockquote>
-<p><strong>Uniform Noise Fault: Impact on Descriptive Statistics (within [s, e))</strong></p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>Mean:</strong></p></li>
-</ul>
-<p>Expected mean shifts by the midpoint of the uniform range:</p>
-<div class="math notranslate nohighlight">
-\[\mathbb{E}[\bar{y}_{[s,e)}] = \bar{x}_{[s,e)} + \frac{a + b}{2}\]</div>
-<ul class="simple">
-<li><p><strong>Variance:</strong></p></li>
-</ul>
-<p>Variance increases by the variance of the uniform noise:</p>
-<div class="math notranslate nohighlight">
-\[\text{Var}(y_{[s,e)}) = \text{Var}(x_{[s,e)}) + \frac{(b - a)^2}{12}.\]</div>
-</div></blockquote>
-</div>
-<p>Variance increases by the variance of the uniform noise.</p>
-<p>—</p>
-<p class="rubric">Notes</p>
-<p>This fault type is useful for simulating <strong>sensor variability</strong>, <strong>environmental interference</strong>, or <strong>random jitter</strong> in measurements.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fault_injector.injector.FaultInjection.plot_compare_values">
-<span class="sig-name descname"><span class="pre">plot_compare_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/fault_injector/injector.html#FaultInjection.plot_compare_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fault_injector.injector.FaultInjection.plot_compare_values" title="Link to this definition"></a></dt>
-<dd><p>This method can be used to plot the injected fault and compare it to the original data</p>
 </dd></dl>
 
 </dd></dl>
@@ -486,8 +148,8 @@ two types of noise distributions: Gaussian (normal) and Uniform.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="modules.html" class="btn btn-neutral float-left" title="fault_injector modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="generate_data.html" class="btn btn-neutral float-right" title="fault_injector.generate_data module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="fault_lib.html" class="btn btn-neutral float-left" title="fault_injector.fault_lib module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="df_injector.html" class="btn btn-neutral float-right" title="fault_injector.df_injector module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -9,17 +9,13 @@ from numpy.typing import ArrayLike
 
 
 class StuckValueFault(BaseFault):
+    """
+    Simulate a stuck value by repeating the stuck value for the desired length of values.
+
+    Args:
+        params (dict, optional): dictionary containing the `stuck_val` key, which corresponds to the repeated value in the output. If set to None, defaults to a `stuck_val` of 1.
+    """
     def __init__(self, params:dict = None):
-        r"""
-        StuckValueFault
-        ----------
-
-        Args
-        ----
-        params (dict):
-        - stuck_value (numeric):
-
-        """
         self.name = 'stuck_value_fault'
 
         if params is None:

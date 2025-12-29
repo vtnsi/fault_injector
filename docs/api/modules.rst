@@ -5,6 +5,8 @@ fault_injector modules
    :maxdepth: 2
    :caption: Modules:
 
-   injector
    generate_data
-   data_frame_injector
+   fault_lib
+   injector
+   df_injector
+   visualization

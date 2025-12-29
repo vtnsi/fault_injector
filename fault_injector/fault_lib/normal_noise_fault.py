@@ -8,19 +8,15 @@ from numbers import Number
 from numpy.typing import ArrayLike
 
 class NormalNoiseFault(BaseFault):
+    """
+    Simulates a normal (gaussian) noise fault
+
+    Args:
+        params (dict, optional):
+            - mu (numeric): Mean of the Gaussian noise distribution
+            - sigma (numeric): Standard deviation of the Gaussian noise distribution. Must be non-negative.
+    """
     def __init__(self, params:dict = None):
-        r"""
-        NormalNoiseFault
-        ----------
-
-        Args
-        ----
-        params (dict):
-        - mu (numeric): Mean of the Gaussian noise distribution
-        - sigma (numeric): Standard deviation of the Gaussian noise distribution. Must be non-negative.
-
-
-        """
         self.name = 'normal_noise_fault'
 
         if params is None:

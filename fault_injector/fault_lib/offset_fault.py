@@ -8,17 +8,13 @@ from numbers import Number
 from numpy.typing import ArrayLike
 
 class OffsetFault(BaseFault):
+    """
+    Simulate an Offset Fault: models a sensor error where a constant bias is added to the measured values during a specific time window.
+
+    Args:
+        params (dict, optional): dictionary expecting the `offset_by` key. This is the value that is constantly added to the true values. If set to None, `offset_by` defaults to 1.
+    """
     def __init__(self, params:dict = None):
-        r"""
-        OffsetFault
-        ----------
-
-        Args
-        ----
-        params (dict):
-        - offset_by (numeric):
-
-        """
         self.name = 'offset_fault'
 
         if params is None:

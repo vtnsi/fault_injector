@@ -4,16 +4,16 @@ import numpy as np
 
 
 class DataGen:
+    """
+    The DataGen class is designed to generate synthetic signal data
+
+    Args:
+        rand_max: should be positive, numeric values. Defaults to None.
+        rand_min: should be positive, numeric values. Defaults to None.
+        size: should be a positive integer. Defaults to 0.
+    """
 
     def __init__(self, rand_max=None, rand_min=None, size=0):
-        """
-        The DataGen class is designed to generate synthetic signal data
-
-        Args:
-            rand_max: should be positive, numeric values. Defaults to None.
-            rand_min: should be positive, numeric values. Defaults to None.
-            size: should be a positive integer. Defaults to 0.
-        """
         try:
             if not rand_max is None and not rand_min is None:
                 self._validate_range(min_val=rand_min, max_val=rand_max, name='random_max and rand_min')
@@ -33,9 +33,12 @@ class DataGen:
         self.values = []
 
 
-    def random_gen(self):
+    def random_gen(self) -> np.ndarray:
         """
-        The random_gen function will populate self.values with the randomly generated values
+        The random_gen function will populate self.values with the randomly generated values. To visualize this data, see `plot_values` method.
+
+        Returns:
+            np.ndarray: this is the array of generated values
         """
         new_vals = np.random.uniform(self.rand_min, self.rand_max, self.size)
         self.values.extend(new_vals)
@@ -47,15 +50,15 @@ class DataGen:
                       freq_params:   dict = None,
                       phase_params:  dict = None) -> dict:
         """
-        Generate amplitude, frequency, and phase data
+        Generate amplitude, frequency, and phase data. To visualize this data, see `plot_frequencies` method.
 
         Args:
-            amp_params      (dict, optional): _description_. Defaults to None.
-            freq_params     (dict, optional): _description_. Defaults to None.
-            phase_params    (dict, optional): _description_. Defaults to None.
+            amp_params      (dict, optional): a dictionary containing the `min` and `max` keys. These params will be used to determine the minimum and maximum amplitude values. If set to None, defaults to dict(min = 0.1, max = 1.0).
+            freq_params     (dict, optional): a dictionary containing the `min` and `max` keys. These params will be used to determine the minimum and maximum frequency values. If set to None, defaults to dict(min = 1.0, max = 100.0).
+            phase_params    (dict, optional): a dictionary containing the `min` and `max` keys. These params will be used to determine the minimum and maximum phase values. If set to None, defaults to dict(min = 0.0, max = 2 * np.pi).
 
         Returns:
-            dict: _description_
+            dict: a dictionary containing the `amplitudes`, `frequencies`, and `phases` data that makes up the frequency domain.
         """
         base_amp_params = dict(min = 0.1, max = 1.0)
         base_freq_params = dict(min = 1.0, max = 100.0)
@@ -73,7 +76,19 @@ class DataGen:
         return frequency_dict
 
 
-    def signal_gen(self, params:dict):
+    def signal_gen(self, params:dict) -> np.ndarray:
+        """
+        Generate a signal in the time domain. To plot this data, see `plot_signal` method.
+
+        Args:
+            params (dict): dictionary containing the `amplitudes`, `frequencies`, and `phases` keys. These keys are all set to numeric lists/arrays. The `frequency_gen` method can be used to generate the frequency domain data
+
+        Raises:
+            ValueError: `amplitudes`, `frequencies`, and `phases` arrays must have equal length
+
+        Returns:
+            np.ndarray: array of numeric values that corresponds to the time domain signal data
+        """
         amplitudes = np.atleast_1d(params['amplitudes'])
         frequencies = np.atleast_1d(params['frequencies'])
         phases = params['phases']
@@ -103,7 +118,7 @@ class DataGen:
 
     def plot_values(self):
         """
-        this function can be used to plot the randomly generated data
+        this function can be used to plot the randomly generated data. To generate this data, see `random_gen` method.
         """
         max_val = max(self.values)
         min_val = min(self.values)
@@ -134,6 +149,8 @@ class DataGen:
         """
         Plot amplitudes vs frequencies, optionally with a phases subplot.
         Frequencies on x-axis. Amplitude stems show magnitude.
+
+        To generate this data, see `frequency_gen` method.
         """
 
         # Validate that data exists
@@ -170,7 +187,9 @@ class DataGen:
 
     def plot_signal(self):
         """
-        this function can be used to plot the randomly generated data
+        this function can be used to plot the randomly generated signal data
+
+        To generate this data, see `signal_gen` method.
         """
         max_val = max(self.values)
         min_val = min(self.values)

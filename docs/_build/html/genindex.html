@@ -15,6 +15,7 @@
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -43,8 +44,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faults/index.html">Sensor Faults</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api/modules.html">fault_injector modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos/index.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -74,23 +76,58 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#D"><strong>D</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
  | <a href="#U"><strong>U</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.DriftFault.__call__">__call__() (fault_injector.fault_lib.DriftFault method)</a>
+
+      <ul>
+        <li><a href="api/fault_lib.html#fault_injector.fault_lib.NaNFault.__call__">(fault_injector.fault_lib.NaNFault method)</a>
+</li>
+        <li><a href="api/fault_lib.html#fault_injector.fault_lib.NormalNoiseFault.__call__">(fault_injector.fault_lib.NormalNoiseFault method)</a>
+</li>
+        <li><a href="api/fault_lib.html#fault_injector.fault_lib.OffsetFault.__call__">(fault_injector.fault_lib.OffsetFault method)</a>
+</li>
+        <li><a href="api/fault_lib.html#fault_injector.fault_lib.StuckValueFault.__call__">(fault_injector.fault_lib.StuckValueFault method)</a>
+</li>
+        <li><a href="api/fault_lib.html#fault_injector.fault_lib.UniformNoiseFault.__call__">(fault_injector.fault_lib.UniformNoiseFault method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/injector.html#fault_injector.injector.Injector.check_fault_instance">check_fault_instance() (fault_injector.injector.Injector method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data_frame_injector.html#fault_injector.data_frame_injector.DataFrameFaultInjection">DataFrameFaultInjection (class in fault_injector.data_frame_injector)</a>
+      <li><a href="api/df_injector.html#fault_injector.df_injector.DataFrameInjector">DataFrameInjector (class in fault_injector.df_injector)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen">DataGen (class in fault_injector.generate_data)</a>
+</li>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.DriftFault">DriftFault (class in fault_injector.fault_lib)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -99,10 +136,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    fault_injector.data_frame_injector
+    fault_injector.df_injector
 
       <ul>
-        <li><a href="api/data_frame_injector.html#module-fault_injector.data_frame_injector">module</a>
+        <li><a href="api/df_injector.html#module-fault_injector.df_injector">module</a>
 </li>
       </ul></li>
       <li>
@@ -112,8 +149,6 @@
         <li><a href="api/generate_data.html#module-fault_injector.generate_data">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fault_injector.injector
 
@@ -121,7 +156,18 @@
         <li><a href="api/injector.html#module-fault_injector.injector">module</a>
 </li>
       </ul></li>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection">FaultInjection (class in fault_injector.injector)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    fault_injector.visualizer
+
+      <ul>
+        <li><a href="api/visualization.html#module-fault_injector.visualizer">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/visualization.html#fault_injector.visualizer.FaultVisualizer">FaultVisualizer (class in fault_injector.visualizer)</a>
+</li>
+      <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.frequency_gen">frequency_gen() (fault_injector.generate_data.DataGen method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -129,23 +175,13 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_drift">inject_drift() (fault_injector.injector.FaultInjection method)</a>
+      <li><a href="api/injector.html#fault_injector.injector.Injector.inject_fault">inject_fault() (fault_injector.injector.Injector method)</a>
 </li>
-      <li><a href="api/data_frame_injector.html#fault_injector.data_frame_injector.DataFrameFaultInjection.inject_fault">inject_fault() (fault_injector.data_frame_injector.DataFrameFaultInjection method)</a>
-
-      <ul>
-        <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_fault">(fault_injector.injector.FaultInjection method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_nan">inject_nan() (fault_injector.injector.FaultInjection method)</a>
+      <li><a href="api/df_injector.html#fault_injector.df_injector.DataFrameInjector.inject_faults">inject_faults() (fault_injector.df_injector.DataFrameInjector method)</a>
 </li>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_noise">inject_noise() (fault_injector.injector.FaultInjection method)</a>
-</li>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_offset">inject_offset() (fault_injector.injector.FaultInjection method)</a>
-</li>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.inject_stuck_value">inject_stuck_value() (fault_injector.injector.FaultInjection method)</a>
+      <li><a href="api/injector.html#fault_injector.injector.Injector">Injector (class in fault_injector.injector)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -157,23 +193,55 @@
     module
 
       <ul>
-        <li><a href="api/data_frame_injector.html#module-fault_injector.data_frame_injector">fault_injector.data_frame_injector</a>
+        <li><a href="api/df_injector.html#module-fault_injector.df_injector">fault_injector.df_injector</a>
 </li>
         <li><a href="api/generate_data.html#module-fault_injector.generate_data">fault_injector.generate_data</a>
 </li>
         <li><a href="api/injector.html#module-fault_injector.injector">fault_injector.injector</a>
 </li>
+        <li><a href="api/visualization.html#module-fault_injector.visualizer">fault_injector.visualizer</a>
+</li>
       </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.NaNFault">NaNFault (class in fault_injector.fault_lib)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.NormalNoiseFault">NormalNoiseFault (class in fault_injector.fault_lib)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.OffsetFault">OffsetFault (class in fault_injector.fault_lib)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.plot_compare_values">plot_compare_values() (fault_injector.injector.FaultInjection method)</a>
+      <li><a href="api/visualization.html#fault_injector.visualizer.FaultVisualizer.plot_comparison">plot_comparison() (fault_injector.visualizer.FaultVisualizer method)</a>
+</li>
+      <li><a href="api/visualization.html#fault_injector.visualizer.FaultVisualizer.plot_comparison_df">plot_comparison_df() (fault_injector.visualizer.FaultVisualizer method)</a>
+</li>
+      <li><a href="api/visualization.html#fault_injector.visualizer.FaultVisualizer.plot_fault_delta">plot_fault_delta() (fault_injector.visualizer.FaultVisualizer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/visualization.html#fault_injector.visualizer.FaultVisualizer.plot_fault_delta_df">plot_fault_delta_df() (fault_injector.visualizer.FaultVisualizer method)</a>
+</li>
+      <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.plot_frequencies">plot_frequencies() (fault_injector.generate_data.DataGen method)</a>
+</li>
+      <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.plot_signal">plot_signal() (fault_injector.generate_data.DataGen method)</a>
+</li>
       <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.plot_values">plot_values() (fault_injector.generate_data.DataGen method)</a>
 </li>
   </ul></td>
@@ -185,8 +253,16 @@
       <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.random_gen">random_gen() (fault_injector.generate_data.DataGen method)</a>
 </li>
   </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/injector.html#fault_injector.injector.FaultInjection.restore_values">restore_values() (fault_injector.injector.FaultInjection method)</a>
+      <li><a href="api/generate_data.html#fault_injector.generate_data.DataGen.signal_gen">signal_gen() (fault_injector.generate_data.DataGen method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.StuckValueFault">StuckValueFault (class in fault_injector.fault_lib)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -194,7 +270,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/data_frame_injector.html#fault_injector.data_frame_injector.DataFrameFaultInjection.update_df">update_df() (fault_injector.data_frame_injector.DataFrameFaultInjection method)</a>
+      <li><a href="api/fault_lib.html#fault_injector.fault_lib.UniformNoiseFault">UniformNoiseFault (class in fault_injector.fault_lib)</a>
 </li>
   </ul></td>
 </tr></table>

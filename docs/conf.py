@@ -23,12 +23,13 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx_autodoc_typehints',
     'myst_parser',
+    'nbsphinx'
 ]
 autodoc_member_order = 'bysource'
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
+nb_execution_mode = "auto"
 
 
 # -- Options for HTML output -------------------------------------------------

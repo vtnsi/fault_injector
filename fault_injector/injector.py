@@ -8,17 +8,17 @@ from numpy.typing import ArrayLike
 
 
 class Injector:
+    """
+    Class designed to help generate and inject faults into data
+
+    Args:
+        fault : _description_
+        params (dict, optional): params should include the start and stop keys. These values default to:
+            - start (int): this corresponds to the starting index for the fault. defaults to 0.
+            - stop (int): this corresponds to the ending index for the fault. defaults to -1.
+    """
 
     def __init__(self, fault, params:dict = None):
-        """
-        Class designed to help generate and inject faults into data
-
-        Args:
-            fault : _description_
-            params (dict, optional): params should include the start and stop keys. These values default to:
-                - start (int): this corresponds to the starting index for the fault. defaults to 0.
-                - stop (int): this corresponds to the ending index for the fault. defaults to -1.
-        """
 
         self.fault = fault
 
