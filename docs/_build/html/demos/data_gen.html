@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Generation Tutorial &mdash; fault_injector  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DataFrame Injector Demo" href="df_injector.html" />
+    <link rel="prev" title="Tutorials" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fault_injector
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Data Generation Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-import-packages">Setup and import packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#random-data">Random Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-frequency-domain-data">Generate Frequency Domain Data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#default-params">Default Params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#custom-params">Custom Params</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#generate-a-signal">Generate a signal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="df_injector.html">DataFrame Injector Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drift_fault.html">Drift Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nan_fault.html">NaN Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="normal_noise_fault.html">Normal Noise Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="offset_fault.html">Offset Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stuck_value_fault.html">Stuck Value Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uniform_noise_fault.html">Uniform Noise Fault Demo</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fault_injector</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Data Generation Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/demos/data_gen.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="data-generation-tutorial">
+<h1>Data Generation Tutorial<a class="headerlink" href="#data-generation-tutorial" title="Link to this heading"></a></h1>
+<p>This tutorial will walk you through:</p>
+<ul class="simple">
+<li><p>importing the DataGen library</p></li>
+<li><p>Generating random data</p></li>
+<li><p>Generating frequency domain data</p></li>
+<li><p>Generating time domain signal data</p></li>
+</ul>
+<section id="setup-and-import-packages">
+<h2>Setup and import packages<a class="headerlink" href="#setup-and-import-packages" title="Link to this heading"></a></h2>
+<p>Import DataGen and other packages that are used in this tutorial</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Add the repo root to sys.path</span>
+<span class="n">repo_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">repo_root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">repo_root</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">fault_injector.generate_data</span> <span class="kn">import</span> <span class="n">DataGen</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</section>
+<section id="random-data">
+<h2>Random Data<a class="headerlink" href="#random-data" title="Link to this heading"></a></h2>
+<p>The steps to generate an array of random values is simple:</p>
+<ul class="simple">
+<li><p>set parameters: rand_min, rand_max, and size</p></li>
+<li><p>create class instance</p></li>
+<li><p>generate the values</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="mf">0.52</span>
+<span class="n">rand_min</span> <span class="o">=</span> <span class="mf">0.48</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="c1"># create class instance</span>
+<span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># generate synthetic data</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">random_gen</span><span class="p">()</span>
+<span class="n">original_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gen_obj</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_values</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="random" src="../_images/random_data.png" /></p>
+</section>
+<section id="generate-frequency-domain-data">
+<h2>Generate Frequency Domain Data<a class="headerlink" href="#generate-frequency-domain-data" title="Link to this heading"></a></h2>
+<p>Frequency Domain Data includes: Frequency, Amplitude, and Phase Data.</p>
+<section id="default-params">
+<h3>Default Params<a class="headerlink" href="#default-params" title="Link to this heading"></a></h3>
+<p>To generate frequency domain data with the default parameters, set <code class="docutils literal notranslate"><span class="pre">amp_params</span></code>, <code class="docutils literal notranslate"><span class="pre">freq_params</span></code>, and <code class="docutils literal notranslate"><span class="pre">phase_params</span></code> to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">gen_obj.plot_frequencies</span></code> can be used to visualize the generated data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">rand_min</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">freq_dict</span> <span class="o">=</span> <span class="n">gen_obj</span><span class="o">.</span><span class="n">frequency_gen</span><span class="p">(</span><span class="n">amp_params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">freq_params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">phase_params</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># plot frequency data</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_frequencies</span><span class="p">(</span><span class="n">params</span> <span class="o">=</span> <span class="n">freq_dict</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Frequency Domain Components&quot;</span><span class="p">,</span> <span class="n">show_phases</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="frequency_domain" src="../_images/frequency_domain.png" /></p>
+</section>
+<section id="custom-params">
+<h3>Custom Params<a class="headerlink" href="#custom-params" title="Link to this heading"></a></h3>
+<p>The data can also be generated with custom parameters. This can be done by setting set <code class="docutils literal notranslate"><span class="pre">amp_params</span></code>, <code class="docutils literal notranslate"><span class="pre">freq_params</span></code>, and/or <code class="docutils literal notranslate"><span class="pre">phase_params</span></code> to a dictionary containing the <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> keys set to numeric values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">rand_min</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># custom parameters</span>
+<span class="n">amp_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">freq_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">phase_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">freq_dict</span> <span class="o">=</span> <span class="n">gen_obj</span><span class="o">.</span><span class="n">frequency_gen</span><span class="p">(</span><span class="n">amp_params</span> <span class="o">=</span> <span class="n">amp_params</span><span class="p">,</span>
+                                  <span class="n">freq_params</span> <span class="o">=</span> <span class="n">freq_params</span><span class="p">,</span>
+                                  <span class="n">phase_params</span> <span class="o">=</span> <span class="n">phase_params</span><span class="p">)</span>
+
+<span class="c1"># plot frequency data</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_frequencies</span><span class="p">(</span><span class="n">params</span> <span class="o">=</span> <span class="n">freq_dict</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Frequency Domain Components&quot;</span><span class="p">,</span> <span class="n">show_phases</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="custom_metrics" src="../_images/custom_metrics.png" /></p>
+</section>
+</section>
+<section id="generate-a-signal">
+<h2>Generate a signal<a class="headerlink" href="#generate-a-signal" title="Link to this heading"></a></h2>
+<p>To generate a time domain signal based on frequency domain data, use the <code class="docutils literal notranslate"><span class="pre">gen_obj.signal_gen</span></code> method. To plot the signal, use the <code class="docutils literal notranslate"><span class="pre">gen_obj.plot_signal</span></code> method.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gen_obj</span><span class="o">.</span><span class="n">signal_gen</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">freq_dict</span><span class="p">)</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_signal</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="signal" src="../_images/signal.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="df_injector.html" class="btn btn-neutral float-right" title="DataFrame Injector Demo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, VTNSI: Dan DeCollo &amp; Stephen Adams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -16,11 +16,12 @@
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="fault_injector.injector module" href="injector.html" />
-    <link rel="prev" title="Tutorials" href="../tutorials/index.html" /> 
+    <link rel="next" title="fault_injector.generate_data module" href="generate_data.html" />
+    <link rel="prev" title="Uniform Noise Fault" href="../faults/uniform_noise_fault.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,13 +47,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">fault_injector modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="injector.html">fault_injector.injector module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="generate_data.html">fault_injector.generate_data module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_frame_injector.html">fault_injector.data_frame_injector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html">fault_injector.fault_lib module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="injector.html">fault_injector.injector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df_injector.html">fault_injector.df_injector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">fault_injector.FaultVisualizer module</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../demos/index.html">Tutorials</a></li>
 </ul>
 
         </div>
@@ -84,16 +88,29 @@
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Modules:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="injector.html">fault_injector.injector module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="injector.html#fault_injector.injector.FaultInjection"><code class="docutils literal notranslate"><span class="pre">FaultInjection</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="generate_data.html">fault_injector.generate_data module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="generate_data.html#fault_injector.generate_data.DataGen"><code class="docutils literal notranslate"><span class="pre">DataGen</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data_frame_injector.html">fault_injector.data_frame_injector module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="data_frame_injector.html#fault_injector.data_frame_injector.DataFrameFaultInjection"><code class="docutils literal notranslate"><span class="pre">DataFrameFaultInjection</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="fault_lib.html">fault_injector.fault_lib module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#driftfault">DriftFault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#normalnoisefault">NormalNoiseFault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#nanfault">NaNFault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#offsetfault">OffsetFault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#stuckvaluefault">StuckValueFault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fault_lib.html#uniformnoisefault">UniformNoiseFault</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="injector.html">fault_injector.injector module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="injector.html#fault_injector.injector.Injector"><code class="docutils literal notranslate"><span class="pre">Injector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="df_injector.html">fault_injector.df_injector module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="df_injector.html#fault_injector.df_injector.DataFrameInjector"><code class="docutils literal notranslate"><span class="pre">DataFrameInjector</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">fault_injector.FaultVisualizer module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html#fault_injector.visualizer.FaultVisualizer"><code class="docutils literal notranslate"><span class="pre">FaultVisualizer</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -104,8 +121,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../tutorials/index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="injector.html" class="btn btn-neutral float-right" title="fault_injector.injector module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../faults/uniform_noise_fault.html" class="btn btn-neutral float-left" title="Uniform Noise Fault" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generate_data.html" class="btn btn-neutral float-right" title="fault_injector.generate_data module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

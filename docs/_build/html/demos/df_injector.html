@@ -1,0 +1,325 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataFrame Injector Demo &mdash; fault_injector  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Drift Fault Demo" href="drift_fault.html" />
+    <link rel="prev" title="Data Generation Tutorial" href="data_gen.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fault_injector
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_gen.html">Data Generation Tutorial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DataFrame Injector Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-import-packages">Setup and import packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-data">Starting Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-faults">Define Faults</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-injectors">Define Injectors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inject-fault">Inject Fault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compare-original-to-new-values">Compare Original to New Values</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plot-fault-deltas">Plot Fault Deltas</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plot-comparison">Plot Comparison</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="drift_fault.html">Drift Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nan_fault.html">NaN Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="normal_noise_fault.html">Normal Noise Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="offset_fault.html">Offset Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stuck_value_fault.html">Stuck Value Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uniform_noise_fault.html">Uniform Noise Fault Demo</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fault_injector</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">DataFrame Injector Demo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/demos/df_injector.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dataframe-injector-demo">
+<h1>DataFrame Injector Demo<a class="headerlink" href="#dataframe-injector-demo" title="Link to this heading"></a></h1>
+<p>This tutorial will walk you through:</p>
+<ul class="simple">
+<li><p>importing the DataGen library</p></li>
+<li><p>Generating random data</p></li>
+<li><p>Generating frequency domain data</p></li>
+<li><p>Generating time domain signal data</p></li>
+</ul>
+<section id="setup-and-import-packages">
+<h2>Setup and import packages<a class="headerlink" href="#setup-and-import-packages" title="Link to this heading"></a></h2>
+<p>Import DataFrameInjector and other packages that are used in this tutorial</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Add the repo root to sys.path</span>
+<span class="n">repo_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">repo_root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">repo_root</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">fault_injector.generate_data</span> <span class="kn">import</span> <span class="n">DataGen</span>
+<span class="kn">from</span> <span class="nn">fault_injector.injector</span> <span class="kn">import</span> <span class="n">Injector</span>
+<span class="kn">from</span> <span class="nn">fault_injector.df_injector</span> <span class="kn">import</span> <span class="n">DataFrameInjector</span>
+<span class="kn">from</span> <span class="nn">fault_injector.visualizer</span> <span class="kn">import</span> <span class="n">FaultVisualizer</span>
+<span class="kn">from</span> <span class="nn">fault_injector.fault_lib</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-data">
+<h2>Starting Data<a class="headerlink" href="#starting-data" title="Link to this heading"></a></h2>
+<p>Create original data frame</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="mf">0.52</span>
+<span class="n">rand_min</span> <span class="o">=</span> <span class="mf">0.48</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;d&#39;</span><span class="p">,</span><span class="s1">&#39;e&#39;</span><span class="p">]:</span>
+    <span class="n">col_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;col_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Column name: </span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># create class object</span>
+    <span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="c1"># generate synthetic data</span>
+    <span class="n">gen_obj</span><span class="o">.</span><span class="n">random_gen</span><span class="p">()</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gen_obj</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_values</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Column name: col_a</p>
+<p><img alt="Column name: col_a" src="../_images/col_a_original.png" /></p>
+<p>Column name: col_b</p>
+<p><img alt="Column name: col_b" src="../_images/col_b_original.png" /></p>
+<p>Column name: col_c</p>
+<p><img alt="Column name: col_c" src="../_images/col_c_original.png" /></p>
+<p>Column name: col_d</p>
+<p><img alt="Column name: col_d" src="../_images/col_d_original.png" /></p>
+<p>Column name: col_e</p>
+<p><img alt="Column name: col_e" src="../_images/col_e_original.png" /></p>
+</section>
+<section id="define-faults">
+<h2>Define Faults<a class="headerlink" href="#define-faults" title="Link to this heading"></a></h2>
+<p>Create two fault instances:</p>
+<ul class="simple">
+<li><p>drift_fault_obj: instance of the DriftFault with a drift rate of 0.0001</p></li>
+<li><p>stuck_fault_obj: instance of the StuckValueFault with a stuck value of 0.51</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fault_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;drift_rate&quot;</span><span class="p">:</span> <span class="mf">0.0001</span><span class="p">}</span>
+<span class="n">drift_fault_obj</span> <span class="o">=</span> <span class="n">DriftFault</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">fault_params</span><span class="p">)</span>
+
+<span class="n">fault_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;stuck_val&quot;</span><span class="p">:</span> <span class="mf">0.51</span><span class="p">}</span>
+<span class="n">stuck_fault_obj</span> <span class="o">=</span> <span class="n">StuckValueFault</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">fault_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-injectors">
+<h2>Define Injectors<a class="headerlink" href="#define-injectors" title="Link to this heading"></a></h2>
+<p>Create 3 injector instances:</p>
+<ul class="simple">
+<li><p>injector_object_a: injection index range is 100 to 400 and uses the drift fault</p></li>
+<li><p>injector_object_b: injection index range is 100 to 400 and uses the stuck value fault</p></li>
+<li><p>injector_object_c: injection index range is 200 to 300 and uses the drift fault</p></li>
+</ul>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">col_d</span></code> gets the same injector as <code class="docutils literal notranslate"><span class="pre">col_c</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># injector_a -&gt; range: 100 to 400, drift fault</span>
+<span class="n">injector_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+                   <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">}</span>
+<span class="n">injector_object_a</span> <span class="o">=</span> <span class="n">Injector</span><span class="p">(</span><span class="n">fault</span><span class="o">=</span><span class="n">drift_fault_obj</span><span class="p">,</span>
+                           <span class="n">params</span><span class="o">=</span><span class="n">injector_params</span><span class="p">)</span>
+
+<span class="c1"># injector_b -&gt; range: 100 to 400, stuck value fault</span>
+<span class="n">injector_object_b</span> <span class="o">=</span> <span class="n">Injector</span><span class="p">(</span><span class="n">fault</span><span class="o">=</span><span class="n">stuck_fault_obj</span><span class="p">,</span>
+                           <span class="n">params</span><span class="o">=</span><span class="n">injector_params</span><span class="p">)</span>
+
+<span class="c1"># injector_c -&gt; range: 200 to 300, drift fault</span>
+<span class="n">injector_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span><span class="mi">200</span><span class="p">,</span>
+                   <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">}</span>
+<span class="n">injector_object_c</span> <span class="o">=</span> <span class="n">Injector</span><span class="p">(</span><span class="n">fault</span><span class="o">=</span><span class="n">drift_fault_obj</span><span class="p">,</span>
+                           <span class="n">params</span><span class="o">=</span><span class="n">injector_params</span><span class="p">)</span>
+
+<span class="n">injector_dict</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;col_a&quot;</span><span class="p">:</span> <span class="n">injector_object_a</span><span class="p">,</span>
+                    <span class="s2">&quot;col_b&quot;</span><span class="p">:</span> <span class="n">injector_object_b</span><span class="p">,</span>
+                    <span class="s2">&quot;col_c&quot;</span><span class="p">:</span> <span class="n">injector_object_c</span><span class="p">,</span>
+                    <span class="s2">&quot;col_d&quot;</span><span class="p">:</span> <span class="n">injector_object_c</span><span class="p">,</span>
+                <span class="p">}</span>
+
+<span class="n">df_injector_object</span> <span class="o">=</span> <span class="n">DataFrameInjector</span><span class="p">(</span><span class="n">injector_dict</span><span class="o">=</span><span class="n">injector_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Col_A</p>
+<ul class="simple">
+<li><p>Fault Type: drift</p></li>
+<li><p>Fault Range: 100:400</p></li>
+<li><p>Injector object: a</p></li>
+</ul>
+<p>Col_B</p>
+<ul class="simple">
+<li><p>Fault Type: stuck value</p></li>
+<li><p>Fault Range: 100:400</p></li>
+<li><p>Injector object: b</p></li>
+</ul>
+<p>Col_C</p>
+<ul class="simple">
+<li><p>Fault Type: drift</p></li>
+<li><p>Fault Range: 200:300</p></li>
+<li><p>Injector object: c</p></li>
+</ul>
+<p>Col_D</p>
+<ul class="simple">
+<li><p>Fault Type: drift</p></li>
+<li><p>Fault Range: 200:300</p></li>
+<li><p>Injector object: c</p></li>
+</ul>
+<p>Col_E</p>
+<ul class="simple">
+<li><p>Fault Type: None</p></li>
+<li><p>Fault Range: None</p></li>
+<li><p>Injector object: None</p></li>
+</ul>
+</section>
+<section id="inject-fault">
+<h2>Inject Fault<a class="headerlink" href="#inject-fault" title="Link to this heading"></a></h2>
+<p>Inject the values and output the new values</p>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">col_e</span></code> does not get a fault injected into it</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_values</span> <span class="o">=</span> <span class="n">df_injector_object</span><span class="o">.</span><span class="n">inject_faults</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="compare-original-to-new-values">
+<h2>Compare Original to New Values<a class="headerlink" href="#compare-original-to-new-values" title="Link to this heading"></a></h2>
+<section id="plot-fault-deltas">
+<h3>Plot Fault Deltas<a class="headerlink" href="#plot-fault-deltas" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initiate the visualizer</span>
+<span class="n">vis</span> <span class="o">=</span> <span class="n">FaultVisualizer</span><span class="p">()</span>
+
+<span class="n">vis</span><span class="o">.</span><span class="n">plot_fault_delta_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">new_values</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Fault Delta&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Column name: col_a</p>
+<p><img alt="Column name: col_a" src="../_images/col_a_delta.png" /></p>
+<p>Column name: col_b</p>
+<p><img alt="Column name: col_b" src="../_images/col_b_delta.png" /></p>
+<p>Column name: col_c</p>
+<p><img alt="Column name: col_c" src="../_images/col_c_delta.png" /></p>
+<p>Column name: col_d</p>
+<p><img alt="Column name: col_d" src="../_images/col_d_delta.png" /></p>
+<p>Column name: col_e</p>
+<p><img alt="Column name: col_e" src="../_images/col_e_delta.png" /></p>
+</section>
+<section id="plot-comparison">
+<h3>Plot Comparison<a class="headerlink" href="#plot-comparison" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">plot_comparison_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">new_values</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Comparison&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Column name: col_a</p>
+<p><img alt="Column name: col_a" src="../_images/col_a_comparison.png" /></p>
+<p>Column name: col_b</p>
+<p><img alt="Column name: col_b" src="../_images/col_b_comparison.png" /></p>
+<p>Column name: col_c</p>
+<p><img alt="Column name: col_c" src="../_images/col_c_comparison.png" /></p>
+<p>Column name: col_d</p>
+<p><img alt="Column name: col_d" src="../_images/col_d_comparison.png" /></p>
+<p>Column name: col_e</p>
+<p><img alt="Column name: col_e" src="../_images/col_e_comparison.png" /></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_gen.html" class="btn btn-neutral float-left" title="Data Generation Tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="drift_fault.html" class="btn btn-neutral float-right" title="Drift Fault Demo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, VTNSI: Dan DeCollo &amp; Stephen Adams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

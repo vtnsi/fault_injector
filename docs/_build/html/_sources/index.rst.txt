@@ -9,6 +9,7 @@ A python package for injecting various faults into a numeric time-series or sens
 
    introduction
    installation
-   tutorials/index
+   faults/index
    api/modules
+   demos/index
 

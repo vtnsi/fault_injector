@@ -9,19 +9,15 @@ from numpy.typing import ArrayLike
 
 
 class UniformNoiseFault(BaseFault):
-    def __init__(self, params:dict = None):
-        r"""
-        UniformNoiseFault
-        ----------
+    """
+    Simulate uniform noise fault.
 
-        Args
-        ----
+    Args:
         params (dict):
-        - min_val (numeric): Mean of the Gaussian noise distribution
-        - max_val (numeric): Standard deviation of the Gaussian noise distribution. Must be non-negative.
-
-
-        """
+            - min_val (numeric): Mean of the Gaussian noise distribution.
+            - max_val (numeric): Standard deviation of the Gaussian noise distribution. Must be non-negative.
+    """
+    def __init__(self, params:dict = None):
         self.name = 'uniform_noise_fault'
 
         if params is None:

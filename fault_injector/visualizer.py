@@ -8,6 +8,14 @@ import pandas as pd
 
 
 class FaultVisualizer:
+    """
+    This class is designed to make it easier to plot and compare faulty data to its original data.
+
+    Args:
+        font_size (int, optional): controls the fault size in the plots. Defaults to 16.
+        plot_size (tuple, optional): controls the plot/fig size. Defaults to (10, 4).
+        colors_dict (dict, optional): dictionary that controls the colors used in the plot. Defaults to `original` being blue, `new` being red, and `delta` being purple.
+    """
     def __init__(self, font_size:int=16, plot_size=(10, 4), colors_dict:dict=None):
         self.font_size = font_size
         self.plot_size = plot_size
@@ -32,6 +40,15 @@ class FaultVisualizer:
 
 
     def plot_fault_delta(self, original_values:np.ndarray, new_values:np.ndarray, title:str=None, file_name:str=None):
+        """
+        Plot the fault delta (new - original)
+
+        Args:
+            original_values (np.ndarray): array of numeric values used to represent the original/true values
+            new_values (np.ndarray): array of numeric values used to represent the fault values
+            title (str, optional): used as the title in the plot. Defaults to None.
+            file_name (str, optional): file name when saving the figure. When not equal to None, the plot will be saved. Defaults to None.
+        """
         self._check_data_type(x=original_values, key='original_values')
         self._check_data_type(x=new_values, key='new_values')
 

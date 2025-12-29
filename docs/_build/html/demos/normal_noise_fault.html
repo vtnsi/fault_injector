@@ -1,0 +1,226 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Normal Noise Fault Demo &mdash; fault_injector  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Offset Fault Demo" href="offset_fault.html" />
+    <link rel="prev" title="NaN Fault Demo" href="nan_fault.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            fault_injector
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_gen.html">Data Generation Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="df_injector.html">DataFrame Injector Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="drift_fault.html">Drift Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nan_fault.html">NaN Fault Demo</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Normal Noise Fault Demo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-import-packages">Setup and import packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#starting-data">Starting Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-fault">Define Fault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#define-injector">Define Injector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inject-fault">Inject Fault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compare-original-to-new-values">Compare Original to New Values</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="offset_fault.html">Offset Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stuck_value_fault.html">Stuck Value Fault Demo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uniform_noise_fault.html">Uniform Noise Fault Demo</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">fault_injector</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Normal Noise Fault Demo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/demos/normal_noise_fault.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="normal-noise-fault-demo">
+<h1>Normal Noise Fault Demo<a class="headerlink" href="#normal-noise-fault-demo" title="Link to this heading"></a></h1>
+<p>This tutorial will walk you through:</p>
+<ul class="simple">
+<li><p>creating a fault instance</p></li>
+<li><p>creating an injector instance</p></li>
+<li><p>using the injector to inject a fault into data</p></li>
+<li><p>visualize the results</p></li>
+</ul>
+<section id="setup-and-import-packages">
+<h2>Setup and import packages<a class="headerlink" href="#setup-and-import-packages" title="Link to this heading"></a></h2>
+<p>Import NormalNoiseFault and other packages that are used in this tutorial</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c1"># Add the repo root to sys.path</span>
+<span class="n">repo_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">repo_root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">repo_root</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">fault_injector.generate_data</span> <span class="kn">import</span> <span class="n">DataGen</span>
+<span class="kn">from</span> <span class="nn">fault_injector.injector</span> <span class="kn">import</span> <span class="n">Injector</span>
+<span class="kn">from</span> <span class="nn">fault_injector.visualizer</span> <span class="kn">import</span> <span class="n">FaultVisualizer</span>
+<span class="kn">from</span> <span class="nn">fault_injector.fault_lib</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</section>
+<section id="starting-data">
+<h2>Starting Data<a class="headerlink" href="#starting-data" title="Link to this heading"></a></h2>
+<p>Generate random generated data using the <code class="docutils literal notranslate"><span class="pre">DataGen</span></code> library. This data will serve as the sensor data for this experiment.</p>
+<p>Any list or array of numeric values can replace the <code class="docutils literal notranslate"><span class="pre">original_value</span></code> variable in this tutorial.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="mf">0.52</span>
+<span class="n">rand_min</span> <span class="o">=</span> <span class="mf">0.48</span>
+<span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="c1"># create class object</span>
+<span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># generate synthetic data</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">random_gen</span><span class="p">()</span>
+<span class="n">original_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gen_obj</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_values</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Generated Data</p>
+<p><img alt="original" src="../_images/original2.png" /></p>
+</section>
+<section id="define-fault">
+<h2>Define Fault<a class="headerlink" href="#define-fault" title="Link to this heading"></a></h2>
+<p>This example will utilize the <code class="docutils literal notranslate"><span class="pre">NormalNoiseFault</span></code> library to create an instance of the normal noise fault. The <code class="docutils literal notranslate"><span class="pre">NormalNoiseFault</span></code> expects the <code class="docutils literal notranslate"><span class="pre">params</span></code> variable to be equal to a dictionary containing the keys <code class="docutils literal notranslate"><span class="pre">mu</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.</p>
+<p>For more information as to how <code class="docutils literal notranslate"><span class="pre">mu</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> are used, please see the <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code> variable in the Numpy random.normal documentation, <a class="reference external" href="https://numpy.org/doc/2.1/reference/random/generated/numpy.random.normal.html">found here</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fault_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mu&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;sigma&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
+<span class="n">fault_obj</span> <span class="o">=</span> <span class="n">NormalNoiseFault</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">fault_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-injector">
+<h2>Define Injector<a class="headerlink" href="#define-injector" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">Injector</span></code> library will be used for the injector instance. This instance take in <code class="docutils literal notranslate"><span class="pre">fault</span></code> and <code class="docutils literal notranslate"><span class="pre">params</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fault</span></code> expects a fault object, just like the one created in the previous step.</p>
+<p><code class="docutils literal notranslate"><span class="pre">params</span></code> expects a dictionary with two keys: <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">stop</span></code>. These keys correspond to the starting and ending indices for the list/array of numeric values that will receive the fault. In this example, the indices that receive the fault range from 100 to 400.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">injector_params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;start&quot;</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span>
+                   <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="mi">400</span><span class="p">}</span>
+<span class="n">injector_object</span> <span class="o">=</span> <span class="n">Injector</span><span class="p">(</span><span class="n">fault</span><span class="o">=</span><span class="n">fault_obj</span><span class="p">,</span>
+                           <span class="n">params</span><span class="o">=</span><span class="n">injector_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="inject-fault">
+<h2>Inject Fault<a class="headerlink" href="#inject-fault" title="Link to this heading"></a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">inject_fault</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Injector</span></code> object to inject the fault. This method expects the <code class="docutils literal notranslate"><span class="pre">x</span></code> variable to be set equal to a list or array of numeric values. This represents the true values prior to receiving a fault. For this example, the <code class="docutils literal notranslate"><span class="pre">original_values</span></code> variable that was generated earlier will be used.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_values</span> <span class="o">=</span> <span class="n">injector_object</span><span class="o">.</span><span class="n">inject_fault</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">original_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="compare-original-to-new-values">
+<h2>Compare Original to New Values<a class="headerlink" href="#compare-original-to-new-values" title="Link to this heading"></a></h2>
+<p>To visualize the fault, we will examine the Fault delta, then plot the new values compared to the true values.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># initiate the visualizer</span>
+<span class="n">vis</span> <span class="o">=</span> <span class="n">FaultVisualizer</span><span class="p">()</span>
+
+<span class="n">vis</span><span class="o">.</span><span class="n">plot_fault_delta</span><span class="p">(</span><span class="n">original_values</span><span class="p">,</span> <span class="n">new_values</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Fault Delta&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fault Delta</p>
+<p><img alt="delta" src="../_images/delta2.png" /></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vis</span><span class="o">.</span><span class="n">plot_comparison</span><span class="p">(</span><span class="n">original_values</span><span class="p">,</span> <span class="n">new_values</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Comparison&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fault Comparison</p>
+<p><img alt="comparison" src="../_images/comparison2.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nan_fault.html" class="btn btn-neutral float-left" title="NaN Fault Demo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="offset_fault.html" class="btn btn-neutral float-right" title="Offset Fault Demo" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, VTNSI: Dan DeCollo &amp; Stephen Adams.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -7,16 +7,16 @@ import pandas as pd
 
 
 class DataFrameInjector:
+    """
+    Class designed to help inject faults into dataframes
+
+    Args:
+        injector_dict (dict):
+        - keys correspond to column names in df
+        - values correspond to fault instances
+    """
 
     def __init__(self, injector_dict:dict):
-        """
-        Class designed to help inject faults into dataframes
-
-        Args:
-            injector_dict (dict):
-            - keys correspond to column names in df
-            - values correspond to fault instances
-        """
 
         self.injector_dict = injector_dict
         self._check_injector_dict()

@@ -8,16 +8,10 @@ from numbers import Number
 from numpy.typing import ArrayLike
 
 class NaNFault(BaseFault):
+    """
+    Simulate a **NaN fault**: models a sensor failure where readings are completely missing for a continuous period of time
+    """
     def __init__(self):
-        r"""
-        NaNFault
-        ----------
-
-        Args
-        ----
-        None
-
-        """
         self.name = 'nan_fault'
 
 
