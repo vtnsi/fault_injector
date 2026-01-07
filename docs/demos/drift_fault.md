@@ -16,7 +16,7 @@ import sys
 import os
 
 # Add the repo root to sys.path
-repo_root = os.path.abspath("..")
+repo_root = os.path.abspath(os.path.join("..", "src"))
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 

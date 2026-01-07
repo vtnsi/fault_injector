@@ -25,8 +25,8 @@ readme = "README.md"
 license = {text = "MIT License"}
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["fault_injector"]
+where = ["src"]
+#include = ["fault_injector"]
 
 
 [tool.black]
