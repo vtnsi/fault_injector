@@ -10,6 +10,11 @@ distribution. Unlike deterministic faults such as bias or drift, this
 fault introduces stochastic fluctuations that reduce signal quality
 without introducing a systematic offset.
 
+Let :math:`\epsilon_i \sim \mathcal{N}(\mu, \sigma^2)` denote the additive
+noise applied to the sensor signal during the fault interval. The
+parameters :math:`\mu` and :math:`\sigma` represent the noise mean and
+standard deviation, respectively.
+
 Normal noise faults commonly arise from electromagnetic interference,
 thermal noise, vibration, or partial hardware degradation.
 
@@ -47,68 +52,6 @@ By default, the noise parameters are:
 
    \mu = 0, \qquad \sigma = \mathrm{std}(x_s, x_{s+1}, \ldots, x_{e-1})
 
-Impact on Statistical Properties
---------------------------------
-
-Let the original signal :math:`x_i` have mean and variance:
-
-.. math::
-
-   \mu_x = \mathbb{E}[x_i], \qquad \sigma_x^2 = \mathrm{Var}(x_i)
-
-Assume noise is applied for indices :math:`i = s, \dots, s + n - 1`, where:
-
-.. math::
-
-   n = e - s
-
-Effect on the Mean
-------------------
-
-The normal noise offset at time :math:`i` is:
-
-.. math::
-
-   \delta_i = \epsilon_i
-
-Since the expected value of the noise is:
-
-.. math::
-
-   \mathbb{E}[\epsilon_i] = \mu
-
-the expected mean of the faulty signal becomes:
-
-.. math::
-
-   \mu_y = \mu_x + \mu
-
-With the default choice :math:`\mu = 0`, the mean remains unchanged:
-
-.. math::
-
-   \mu_y = \mu_x
-
-Thus, normal noise does not introduce systematic bias when zero-mean
-noise is used.
-
-Effect on the Variance
-----------------------
-
-The variance of the faulty signal during the fault window is:
-
-.. math::
-
-   \sigma_y^2 = \mathrm{Var}(x_i + \epsilon_i)
-
-Assuming the noise is independent of the true signal:
-
-.. math::
-
-   \sigma_y^2 = \sigma_x^2 + \sigma^2
-
-This shows that **normal noise increases signal variance** while
-preserving the underlying mean.
 
 Key Takeaway
 ------------

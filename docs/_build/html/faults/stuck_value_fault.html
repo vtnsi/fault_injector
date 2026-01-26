@@ -48,6 +48,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supported_faults.html">Supported Fault Types &amp; Mathematical Background</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Sensor Faults</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="drift_fault.html">Drift Fault</a></li>
@@ -58,9 +59,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#define-fault">Define Fault</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#math-behind-fault">Math Behind Fault</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#linear-stuck-value-model">Linear Stuck Value Model</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#impact-on-statistical-properties">Impact on Statistical Properties</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#effect-on-the-mean">Effect on the Mean</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#effect-on-the-variance">Effect on the Variance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#key-takeaway">Key Takeaway</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
 </ul>
@@ -68,8 +66,8 @@
 <li class="toctree-l2"><a class="reference internal" href="uniform_noise_fault.html">Uniform Noise Fault</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../demos/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
 </ul>
 
         </div>
@@ -101,18 +99,22 @@
 <h1>Stuck Value Fault<a class="headerlink" href="#stuck-value-fault" title="Link to this heading"></a></h1>
 <section id="define-fault">
 <h2>Define Fault<a class="headerlink" href="#define-fault" title="Link to this heading"></a></h2>
-<p>A <strong>stuck value fault</strong> models a sensor error where readings become
-constant for a period of time, effectively “freezing” the output at a
-fixed value. Unlike offset faults, which add a fixed bias, stuck value
-faults replace the sensor signal entirely with a constant.</p>
-<p>Stuck value faults can occur due to hardware malfunctions, software
-errors, or saturated sensor outputs. The constant value can be chosen
-explicitly or generated relative to the underlying signal.</p>
-<p>For example, the stuck value can be:</p>
+<p>A <strong>stuck value fault</strong> models a sensor error in which readings become
+constant for a period of time, effectively freezing the output at a
+fixed value. Unlike offset faults, which introduce an additive bias,
+stuck value faults replace the sensor signal entirely with a constant.</p>
+<p>Stuck value faults can arise from hardware malfunctions, software errors,
+or sensor saturation. Let <span class="math notranslate nohighlight">\(c\)</span> denote the constant value to which
+the sensor output is fixed during the fault interval.</p>
+<p>The stuck value may be specified directly or generated relative to the
+underlying signal. For example, <span class="math notranslate nohighlight">\(c\)</span> may be defined as</p>
 <div class="math notranslate nohighlight">
-\[c = \text{mean}(x_s, x_{s+1}, \ldots, x_{e-1}) + d \cdot U(0.01, 0.1) \cdot \text{mean}(x_s, \ldots, x_{e-1})\]</div>
-<p>where <span class="math notranslate nohighlight">\(d\)</span> is a user-defined scale factor and <span class="math notranslate nohighlight">\(U(0.01, 0.1)\)</span> is a
-random uniform variable.</p>
+\[c = \bar{x} \left( 1 + d \cdot u \right), \qquad
+u \sim \mathcal{U}(0.01, 0.1)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\bar{x} = \frac{1}{e - s} \sum_{i=s}^{e-1} x_i\]</div>
+<p>and <span class="math notranslate nohighlight">\(d \in \mathbb{R}\)</span> is a user-defined scaling factor.</p>
 </section>
 <section id="math-behind-fault">
 <h2>Math Behind Fault<a class="headerlink" href="#math-behind-fault" title="Link to this heading"></a></h2>
@@ -134,38 +136,6 @@ x_i, &amp; \text{otherwise}
 \end{cases}\end{split}\]</div>
 <p>This represents the sensor output being fixed at <span class="math notranslate nohighlight">\(c\)</span> during the
 fault window.</p>
-</section>
-<section id="impact-on-statistical-properties">
-<h2>Impact on Statistical Properties<a class="headerlink" href="#impact-on-statistical-properties" title="Link to this heading"></a></h2>
-<p>Let the original signal <span class="math notranslate nohighlight">\(x_i\)</span> have mean and variance:</p>
-<div class="math notranslate nohighlight">
-\[\mu_x = \mathbb{E}[x_i], \qquad \sigma_x^2 = \mathrm{Var}(x_i)\]</div>
-<p>Assume the stuck value is applied for indices <span class="math notranslate nohighlight">\(i = s, s+1, \ldots, e-1\)</span>,
-with fault duration:</p>
-<div class="math notranslate nohighlight">
-\[n = e - s\]</div>
-</section>
-<section id="effect-on-the-mean">
-<h2>Effect on the Mean<a class="headerlink" href="#effect-on-the-mean" title="Link to this heading"></a></h2>
-<p>The offset at time <span class="math notranslate nohighlight">\(i\)</span> is:</p>
-<div class="math notranslate nohighlight">
-\[\delta_i = c - x_i\]</div>
-<p>The mean of the faulty signal becomes:</p>
-<div class="math notranslate nohighlight">
-\[\mu_y = \frac{1}{N} \left( \sum_{i \notin [s, e)} x_i + \sum_{i \in [s, e)} c \right)
-      = \frac{1}{N} \left( \sum_{i \notin [s, e)} x_i + n \cdot c \right)\]</div>
-<p>This shows that stuck value faults <strong>shift the mean toward the stuck
-value</strong>, with the effect proportional to the fault duration.</p>
-</section>
-<section id="effect-on-the-variance">
-<h2>Effect on the Variance<a class="headerlink" href="#effect-on-the-variance" title="Link to this heading"></a></h2>
-<p>The variance of the faulty signal is:</p>
-<div class="math notranslate nohighlight">
-\[\sigma_y^2 = \frac{1}{N} \sum_{i=0}^{N-1} (y_i - \mu_y)^2\]</div>
-<p>During the fault window, the contribution of the constant values
-reduces variability. Therefore, stuck value faults generally <strong>reduce
-the variance</strong> compared to the true signal, especially for long fault
-durations.</p>
 </section>
 <section id="key-takeaway">
 <h2>Key Takeaway<a class="headerlink" href="#key-takeaway" title="Link to this heading"></a></h2>

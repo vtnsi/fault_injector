@@ -46,11 +46,10 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../supported_faults.html">Supported Fault Types &amp; Mathematical Background</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faults/index.html">Sensor Faults</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="data_gen.html">Data Generation Tutorial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="df_injector.html">DataFrame Injector Demo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="drift_fault.html">Drift Fault Demo</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">NaN Fault Demo</a><ul>
@@ -68,6 +67,7 @@
 <li class="toctree-l2"><a class="reference internal" href="uniform_noise_fault.html">Uniform Noise Fault Demo</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../api/modules.html">fault_injector modules</a></li>
 </ul>
 
         </div>
@@ -111,11 +111,10 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># Add the repo root to sys.path</span>
-<span class="n">repo_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span>
+<span class="n">repo_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">))</span>
 <span class="k">if</span> <span class="n">repo_root</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">repo_root</span><span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">fault_injector.generate_data</span> <span class="kn">import</span> <span class="n">DataGen</span>
 <span class="kn">from</span> <span class="nn">fault_injector.injector</span> <span class="kn">import</span> <span class="n">Injector</span>
 <span class="kn">from</span> <span class="nn">fault_injector.visualizer</span> <span class="kn">import</span> <span class="n">FaultVisualizer</span>
 <span class="kn">from</span> <span class="nn">fault_injector.fault_lib</span> <span class="kn">import</span> <span class="o">*</span>
@@ -128,17 +127,42 @@
 <h2>Starting Data<a class="headerlink" href="#starting-data" title="Link to this heading"></a></h2>
 <p>Generate random generated data using the <code class="docutils literal notranslate"><span class="pre">DataGen</span></code> library. This data will serve as the sensor data for this experiment.</p>
 <p>Any list or array of numeric values can replace the <code class="docutils literal notranslate"><span class="pre">original_value</span></code> variable in this tutorial.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">plot_values</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        this function can be used to plot the randomly generated data. To generate this data, see `random_gen` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_val</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">min_val</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># calculate the middle of the extremes</span>
+        <span class="n">y_mid</span> <span class="o">=</span>  <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">min_val</span>
+
+        <span class="c1"># set the y_max to 2 times the mid. This center the data points on the y axis</span>
+        <span class="n">y_max</span> <span class="o">=</span> <span class="n">y_mid</span> <span class="o">*</span> <span class="mi">2</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+        <span class="c1"># plot the generated data</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+
+        <span class="c1"># plot a horizontal line across the middle</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y_mid</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+        <span class="c1"># ylim assumes the values are positive</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_max</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rand_max</span> <span class="o">=</span> <span class="mf">0.52</span>
 <span class="n">rand_min</span> <span class="o">=</span> <span class="mf">0.48</span>
 <span class="n">size</span> <span class="o">=</span> <span class="mi">500</span>
 
-<span class="c1"># create class object</span>
-<span class="n">gen_obj</span> <span class="o">=</span> <span class="n">DataGen</span><span class="p">(</span><span class="n">rand_max</span><span class="p">,</span> <span class="n">rand_min</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-
 <span class="c1"># generate synthetic data</span>
-<span class="n">gen_obj</span><span class="o">.</span><span class="n">random_gen</span><span class="p">()</span>
-<span class="n">original_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gen_obj</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="n">gen_obj</span><span class="o">.</span><span class="n">plot_values</span><span class="p">()</span>
+<span class="n">original_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">rand_min</span><span class="p">,</span> <span class="n">rand_max</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">plot_values</span><span class="p">(</span><span class="n">original_values</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Generated Data</p>

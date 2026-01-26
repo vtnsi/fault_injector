@@ -4,21 +4,23 @@ Offset Fault
 Define Fault
 ------------
 
-An **offset fault** models a sensor error where a constant bias is added
-to the measured values during a specific time window. Unlike drift,
-which accumulates over time, offset is a fixed deviation applied
-instantly when the fault occurs.
+An **offset fault** models a sensor error in which a constant additive bias
+is applied to the measured values over a specific time window. Unlike
+drift, which accumulates gradually, an offset fault introduces an
+instantaneous and fixed deviation from the true signal.
 
-Offset faults commonly arise from calibration errors, sudden
-environmental changes, or sensor misalignment.
-
-The **offset value** can be defined relative to the signal as:
+Let :math:`b` denote the offset magnitude applied during the fault
+interval. The offset is defined relative to the signal scale as
 
 .. math::
 
-   \text{offset\_value} = \text{mean}(x_s, x_{s+1}, \ldots, x_{e-1}) \cdot \text{offset\_rate}
+   b = r \cdot \frac{1}{e - s} \sum_{i=s}^{e-1} x_i
 
-where ``offset_rate`` is a scaling factor.
+where :math:`r \in \mathbb{R}` is a dimensionless offset rate.
+
+Offset faults commonly arise from calibration errors, sudden environmental
+changes, or sensor misalignment.
+
 
 Math Behind Fault
 -----------------
@@ -38,56 +40,12 @@ The observed (faulty) signal :math:`y_i` is defined as:
 
    y_i =
    \begin{cases}
-   x_i + \text{offset\_value}, & s \le i < e \\
+   x_i + b, & s \le i < e \\
    x_i, & \text{otherwise}
    \end{cases}
 
+
 This represents a constant additive bias during the fault window.
-
-Impact on Statistical Properties
---------------------------------
-
-Let the original signal :math:`x_i` have mean and variance:
-
-.. math::
-
-   \mu_x = \mathbb{E}[x_i], \qquad \sigma_x^2 = \mathrm{Var}(x_i)
-
-Assume the offset is applied for indices :math:`i = s, s+1, ..., e-1`,
-with fault duration:
-
-.. math::
-
-   n = e - s
-
-Effect on the Mean
-------------------
-
-The offset at time :math:`i` is:
-
-.. math::
-
-   \delta_i = \text{offset\_value}
-
-The mean of the faulty signal becomes:
-
-.. math::
-
-   \mu_y = \mu_x + \text{offset\_value}
-
-Thus, offset faults introduce a **systematic shift in the mean** without
-changing the underlying signal dynamics.
-
-Effect on the Variance
-----------------------
-
-Since the offset is constant, the variance of the faulty signal is:
-
-.. math::
-
-   \sigma_y^2 = \mathrm{Var}(x_i + \delta_i)
-              = \mathrm{Var}(x_i)
-              = \sigma_x^2
 
 Key Takeaway
 ------------
