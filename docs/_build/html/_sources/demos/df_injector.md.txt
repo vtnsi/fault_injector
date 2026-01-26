@@ -19,11 +19,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Add the repo root to sys.path
-repo_root = os.path.abspath("..")
+repo_root = os.path.abspath(os.path.join("..", "src"))
 if repo_root not in sys.path:
     sys.path.insert(0, repo_root)
 
-from fault_injector.generate_data import DataGen
+
 from fault_injector.injector import Injector
 from fault_injector.df_injector import DataFrameInjector
 from fault_injector.visualizer import FaultVisualizer
@@ -35,6 +35,36 @@ from fault_injector.fault_lib import *
 Create original data frame
 
 ```python
+    def plot_values(values, size):
+        """
+        this function can be used to plot the randomly generated data. To generate this data, see `random_gen` method.
+        """
+        max_val = max(values)
+        min_val = min(values)
+
+        # calculate the middle of the extremes
+        y_mid =  (max_val - min_val) / 2 + min_val
+
+        # set the y_max to 2 times the mid. This center the data points on the y axis
+        y_max = y_mid * 2
+
+        fig, ax = plt.subplots()
+        # plot the generated data
+        ax.plot(values, color="blue")
+
+        # plot a horizontal line across the middle
+        ax.hlines(y=y_mid, xmin=0, xmax=size, color="red")
+
+        ax.set(xlabel="time", ylabel="value")
+
+        # ylim assumes the values are positive
+        ax.set_ylim([0, y_max])
+        ax.grid()
+
+        plt.show()
+```
+
+```python
 rand_max = 0.52
 rand_min = 0.48
 size = 500
@@ -44,13 +74,10 @@ for i in ['a','b','c','d','e']:
     col_name = f'col_{i}'
     print(f'Column name: {col_name}')
 
-    # create class object
-    gen_obj = DataGen(rand_max, rand_min, size)
-
     # generate synthetic data
-    gen_obj.random_gen()
-    df[col_name] = np.array(gen_obj.values)
-    gen_obj.plot_values()
+    values = np.random.uniform(rand_min, rand_max, size)
+    df[col_name] = np.array(values)
+    plot_values(values, size)
 ```
 
 Column name: col_a

@@ -8,8 +8,9 @@ A python package for injecting various faults into a numeric time-series or sens
    :caption: Contents:
 
    introduction
+   supported_faults
    installation
    faults/index
-   api/modules
    demos/index
+   api/modules
 

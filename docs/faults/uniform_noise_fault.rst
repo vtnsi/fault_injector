@@ -4,22 +4,30 @@ Uniform Noise Fault
 Define Fault
 ------------
 
-A **uniform noise fault** models a sensor degradation where measurements
+A **uniform noise fault** models a sensor degradation in which measurements
 are corrupted by random noise drawn from a uniform distribution. Unlike
 normal (Gaussian) noise, uniform noise introduces equally likely
 fluctuations within a bounded range.
 
-Uniform noise faults can occur due to quantization errors, sensor
+Uniform noise faults can arise from quantization effects, sensor
 resolution limits, or low-level interference.
 
-By default, the noise range is chosen based on the signal's standard
-deviation:
+Let :math:`\epsilon_i \sim \mathcal{U}(a, b)` denote the additive noise
+applied during the fault interval. By default, the bounds :math:`a` and
+:math:`b` are defined relative to the signal scale as
 
 .. math::
 
-   \epsilon_i \sim U(a, b), \quad
-   a = -\text{std}(x_s, x_{s+1}, \ldots, x_{e-1}), \quad
-   b = \text{std}(x_s, x_{s+1}, \ldots, x_{e-1})
+   a = -\sigma, \qquad b = \sigma
+
+where
+
+.. math::
+
+   \sigma = \sqrt{\frac{1}{e - s} \sum_{i=s}^{e-1} \left(x_i - \bar{x}\right)^2},
+   \qquad
+   \bar{x} = \frac{1}{e - s} \sum_{i=s}^{e-1} x_i .
+
 
 Math Behind Fault
 -----------------
@@ -46,64 +54,6 @@ The observed (faulty) signal :math:`y_i` is defined as:
 where :math:`\epsilon_i` is independently sampled from the uniform
 distribution :math:`U(a, b)`.
 
-Impact on Statistical Properties
---------------------------------
-
-Let the original signal :math:`x_i` have mean and variance:
-
-.. math::
-
-   \mu_x = \mathbb{E}[x_i], \qquad \sigma_x^2 = \mathrm{Var}(x_i)
-
-Assume noise is applied for indices :math:`i = s, s+1, \ldots, e-1`,
-with fault duration:
-
-.. math::
-
-   n = e - s
-
-Effect on the Mean
-------------------
-
-The uniform noise offset at time :math:`i` is:
-
-.. math::
-
-   \delta_i = \epsilon_i
-
-Since the uniform distribution is symmetric by default, the expected
-value of the noise is zero:
-
-.. math::
-
-   \mathbb{E}[\epsilon_i] = 0
-
-Thus, the expected mean of the faulty signal is:
-
-.. math::
-
-   \mu_y = \mu_x
-
-Uniform noise does not introduce systematic bias in the mean.
-
-Effect on the Variance
-----------------------
-
-The variance of the noise term is:
-
-.. math::
-
-   \mathrm{Var}(\epsilon_i) = \frac{(b - a)^2}{12}
-
-Assuming independence from the signal, the variance of the faulty signal
-becomes:
-
-.. math::
-
-   \sigma_y^2 = \mathrm{Var}(x_i + \epsilon_i) = \sigma_x^2 + \frac{(b - a)^2}{12}
-
-This shows that uniform noise increases the variability of the signal
-without changing its average value.
 
 Key Takeaway
 ------------

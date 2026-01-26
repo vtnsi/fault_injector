@@ -36,52 +36,6 @@ The observed (faulty) signal :math:`y_i` is defined as:
    x_i, & \text{otherwise}
    \end{cases}
 
-Impact on Statistical Properties
---------------------------------
-
-Let the original signal :math:`x_i` have mean and variance:
-
-.. math::
-
-   \mu_x = \mathbb{E}[x_i], \qquad \sigma_x^2 = \mathrm{Var}(x_i)
-
-Assume NaN values occur for indices :math:`i = s, ..., s + n - 1`, where
-
-.. math::
-
-   n = e - s
-
-Effect on the Mean
-------------------
-
-The NaN offset at time :math:`i` is undefined during the fault window.
-If NaN values are **ignored** when computing the mean, the observed
-mean is computed over the remaining samples:
-
-.. math::
-
-   \mu_y = \frac{1}{N - n} \sum_{i \notin [s, e)} x_i
-
-For a stationary signal, this yields approximately:
-
-.. math::
-
-   \mu_y \approx \mu_x
-
-Effect on the Variance
-----------------------
-
-The variance of the observed signal (ignoring NaN values) is:
-
-.. math::
-
-   \sigma_y^2 = \frac{1}{N - n} \sum_{i \notin [s, e)} (x_i - \mu_y)^2
-
-For stationary signals with sufficient remaining samples:
-
-.. math::
-
-   \sigma_y^2 \approx \sigma_x^2
 
 Key Takeaway
 ------------
