@@ -18,6 +18,7 @@ author = 'VTNSI: Dan DeCollo & Stephen Adams'
 
 extensions = [
     'sphinx.ext.autodoc',
+    "sphinx.ext.autosummary",
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
@@ -26,6 +27,8 @@ extensions = [
     'nbsphinx'
 ]
 autodoc_member_order = 'bysource'
+autosummary_generate = True
+nbsphinx_allow_errors = True
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
